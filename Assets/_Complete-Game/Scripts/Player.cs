@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;	//Allows us to use UI.
 using UnityEngine.SceneManagement;
 
@@ -8,6 +8,9 @@ namespace Relay
 	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 	public class Player : MovingObject
 	{
+		// model state
+		private readonly List<Animal> heldAnimals = new List<Animal>();
+
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
 		public Text foodText;						//UI Text to display current player food total.
@@ -221,6 +224,51 @@ namespace Relay
 
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
+			}
+		}
+
+		public bool tryPickUp (Animal a)
+		{
+			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
+			if (this.heldAnimals.Count > 2)
+			{
+				// hands are full
+				return false;
+			}
+			else if (distanceToAnimal > 1)
+			{
+				// animal is too far away to grab
+				return false;
+			}
+			else if (/* TODO animal is not in the map */ false)
+			{
+				return false;
+			}
+			else
+			{
+				this.heldAnimals.Add (a);
+				return true;
+			}
+		}
+
+		/**
+		 * Is "dropping" an animal off the same as putting it into a home?
+		 * 
+		 * Do animals automatically enter their home, or do you need to drop it?
+		 * 
+		 * returns true if successfully dropped, false if not
+		 */
+		public bool tryDrop (Animal a, int dropX, int dropY)
+		{
+			if (heldAnimals.Contains (a))
+			{
+				heldAnimals.Remove (a);
+				// TODO somehow add the animal back onto the Level at dropX dropY
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
