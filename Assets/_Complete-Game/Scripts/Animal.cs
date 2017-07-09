@@ -9,7 +9,7 @@ namespace Relay
 	/// </summary>
 	public class Animal : MonoBehaviour
 	{
-		public Home wantedHome;
+		public Home WantedHome;
 	}
 
 	/// <summary>
