@@ -21,7 +21,7 @@ namespace Relay
 		/**
 		 * Does NOT do checking to see if the animal/home pairing is correct; do that in the callee!
 		 */
-		public bool fill(Animal occupant) {
+		public bool Fill(Animal occupant) {
 			if (this.occupant == null) {
 				this.occupant = occupant;
 				return true;
