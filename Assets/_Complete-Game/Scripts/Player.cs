@@ -227,7 +227,7 @@ namespace Relay
 			}
 		}
 
-		public bool tryPickUp (Animal a)
+		public bool TryPickUp (Animal a)
 		{
 			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
 			if (this.heldAnimals.Count > 2)
@@ -258,7 +258,7 @@ namespace Relay
 		 * 
 		 * returns true if successfully dropped, false if not
 		 */
-		public bool tryDrop (Animal a, int dropX, int dropY)
+		public bool TryDrop (Animal a, int dropX, int dropY)
 		{
 			if (heldAnimals.Contains (a))
 			{
