@@ -79,7 +79,7 @@ namespace Relay
                     }
 					else if (tileArrays[y][x] == mapDictionary.wall)
 					{
-						toInstantiate = wallTiles[Random.Range(0, floorTiles.Length)];
+						toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
 					}
 					else
 					{
@@ -97,9 +97,21 @@ namespace Relay
             }
         }
 
-        void SetupBoardObjects(string objects)
+        void SetupBoardObjects(string boardObjects)
         {
-            
+            foreach (var boardObject in boardObjects.Split('\n'))
+            {
+                // The boardObject looks like "@ 1,2"
+                var tileAndPosition = boardObject.Split(' ');
+				var tile = tileAndPosition[0];
+                var position = tileAndPosition[1].Split(',');
+                int x = Int32.Parse(position[0]);
+                int y = Int32.Parse(position[1]);
+
+                var toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+	            GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+			}
         }
 
         // Instantiate the given object at the given vector.
