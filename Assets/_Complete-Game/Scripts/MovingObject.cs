@@ -6,9 +6,9 @@ namespace Relay
 	//The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class.
 	public abstract class MovingObject : MonoBehaviour
 	{
-		public float moveTime = 0.1f;			//Time it will take object to move, in seconds.
 		public LayerMask blockingLayer;			//Layer on which collision will be checked.
-		
+		private bool isMoving = false;          //Is this object currently moving?
+		public float moveTime = 0.1f;			//Time it will take object to move, in seconds.
 		
 		private BoxCollider2D boxCollider; 		//The BoxCollider2D component attached to this object.
 		private Rigidbody2D rb2D;				//The Rigidbody2D component attached to this object.
@@ -26,6 +26,10 @@ namespace Relay
 			
 			//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
 			inverseMoveTime = 1f / moveTime;
+		}
+
+		public bool isCurrentlyMoving() {
+			return isMoving;
 		}
 		
 		
@@ -66,6 +70,7 @@ namespace Relay
 		//Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
 		protected IEnumerator SmoothMovement (Vector3 end)
 		{
+			isMoving = true;
 			//Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
 			//Square magnitude is used instead of magnitude because it's computationally cheaper.
 			float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
@@ -85,6 +90,8 @@ namespace Relay
 				//Return and loop until sqrRemainingDistance is close enough to zero to end the function
 				yield return null;
 			}
+			rb2D.MovePosition (end);
+			isMoving = false;
 		}
 		
 		
