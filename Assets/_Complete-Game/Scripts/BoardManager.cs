@@ -59,7 +59,7 @@ namespace Relay
         //Sets up the outer walls and floor (background) of the game board.
         void SetupBoardLandscape(string tiles)
         {
-            var tileArrays = tiles.Split('\n');
+			var tileArrays = tiles.Split('\n');
 
             //Instantiate Board and set boardHolder to its transform.
             boardHolder = new GameObject("Board").transform;
@@ -77,7 +77,7 @@ namespace Relay
                     {
 						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                     }
-					else if (tileArrays[x][y] == mapDictionary.wall)
+					else if (tileArrays[y][x] == mapDictionary.wall)
 					{
 						toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
 					}
@@ -153,11 +153,11 @@ namespace Relay
                 return true;
             }
 
-            var rowLength = levelRows[0].Length;
+			var rowLength = levelRows[0].Length;
 
             foreach (string row in levelRows)
             {
-                if (row.Length != rowLength)
+				if (row.Length != rowLength)
                 {
                     return false;
                 }
@@ -169,8 +169,9 @@ namespace Relay
         //SetupScene initializes our level and calls the previous functions to lay out the game board
         public void SetupScene(TextAsset tiles, TextAsset objects)
         {
-            var tilesString = tiles.ToString();
-	        var objectsString = objects.ToString();
+			// For some reason, there's an invisible whitespace character at the beginning of the TextAsset.
+			var tilesString = tiles.text.Trim();
+			var objectsString = objects.text.Trim();
 
             mapDictionary = new MapDictionary(new List<char> { 'a', 'b' });
 
