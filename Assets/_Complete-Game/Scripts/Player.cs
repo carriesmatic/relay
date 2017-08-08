@@ -44,7 +44,7 @@ namespace Relay
 		private void Update ()
 		{
 			//If it's not the player's turn, exit the function.
-			if(!GameManager.instance.playersTurn) return;
+			if (this.isCurrentlyMoving()) return;
 
 			int horizontal = 0;  	//Used to store the horizontal move direction.
 			int vertical = 0;		//Used to store the vertical move direction.
@@ -130,9 +130,6 @@ namespace Relay
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
 			}
-
-			//Set the playersTurn boolean of GameManager to false now that players turn is over.
-			GameManager.instance.playersTurn = false;
 		}
 
 
