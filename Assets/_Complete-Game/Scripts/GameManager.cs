@@ -84,10 +84,11 @@ namespace Relay
 			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
 			Invoke("HideLevelImage", levelStartDelay);
 
-			TextAsset board = Resources.Load("Levels/1") as TextAsset;
+			TextAsset tiles = Resources.Load("Levels/1/tiles") as TextAsset;
+			TextAsset objects = Resources.Load("Levels/1/objects") as TextAsset;
 
 			// Call the SetupScene function of the BoardManager script, pass it current level representation.
-			boardScript.SetupScene(board);
+			boardScript.SetupScene(tiles, objects);
 
 		}
 
