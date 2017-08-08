@@ -77,18 +77,18 @@ namespace Relay
                     {
 						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                     }
-                    else
-                    {
-                        //Choose a random tile from our array of floor tile prefabs and prepare to instantiate it.
-                        if (tileArrays[y][x] == mapDictionary.)
-                        {
-                            
-                        }
-						GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+					else if (tileArrays[y][x] == mapDictionary.wall)
+					{
+						toInstantiate = wallTiles[Random.Range(0, floorTiles.Length)];
+					}
+					else
+					{
+                        // Instantiate a floor tile by default.
+						toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
 					}
 
-                    //Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
-                    GameObject instance =
+					//Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
+					GameObject instance =
                         Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 
                     //Set the parent of our newly instantiated object instance to boardHolder, this is just organizational to avoid cluttering hierarchy.
@@ -99,6 +99,7 @@ namespace Relay
 
         void SetupBoardObjects(string objects)
         {
+            
         }
 
         // Instantiate the given object at the given vector.
