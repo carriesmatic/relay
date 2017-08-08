@@ -72,7 +72,9 @@ namespace Relay
 
                     //Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
                     if (x == -1 || x == columns || y == -1 || y == rows)
-                        toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
+                    {
+						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
+					}
 
                     //Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
                     GameObject instance =
@@ -86,7 +88,6 @@ namespace Relay
 
         void SetupBoardObjects(string objects)
         {
-
         }
 
         // Instantiate the given object at the given vector.
