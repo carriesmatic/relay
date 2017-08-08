@@ -77,7 +77,7 @@ namespace Relay
                     {
 						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                     }
-					else if (tileArrays[y][x] == mapDictionary.wall)
+					else if (tileArrays[x][y] == mapDictionary.wall)
 					{
 						toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
 					}
@@ -105,8 +105,8 @@ namespace Relay
                 var tileAndPosition = boardObject.Split(' ');
 				var tile = tileAndPosition[0];
                 var position = tileAndPosition[1].Split(',');
-                int x = Int32.Parse(position[0]);
-                int y = Int32.Parse(position[1]);
+                int y = Int32.Parse(position[0]);
+                int x = Int32.Parse(position[1]);
 
                 var toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
 	            GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
