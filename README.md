@@ -1,5 +1,5 @@
 # relay
-A young child carries two trusty stuffed animals, one under each arm. Charlie the bear, his constant companion, dangles from his right arm. Molly the bunny smiles up from under his left. Vast fields, tall mountains, and burning lava covered the land before him. The child is ready to begin an adventure!
+A young child carries two trusty stuffed animals, one under each arm. Charlie the bear, his constant companion, dangles from his right arm. Sheila the bunny smiles up from under his left. Vast fields, tall mountains, and burning lava covers the land before the child's eyes. The child is ready to begin an adventure!
 
 This repo holds the entire Unity Project.
 
