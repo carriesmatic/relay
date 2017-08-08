@@ -44,6 +44,7 @@ namespace Relay
             }
         }
 
+        private MapDictionary mapDictionary = new MapDictionary();      //The mapping dictionary for board symbols.
         private int columns = 0;                                        //Number of columns in our game board.
         private int rows = 0;                                           //Number of rows in our game board.
 
@@ -58,6 +59,8 @@ namespace Relay
         //Sets up the outer walls and floor (background) of the game board.
         void SetupBoardLandscape(string tiles)
         {
+            var tileArrays = tiles.Split('\n');
+
             //Instantiate Board and set boardHolder to its transform.
             boardHolder = new GameObject("Board").transform;
 
@@ -67,13 +70,21 @@ namespace Relay
                 //Loop along y axis, starting from -1 to place floor or outerwall tiles.
                 for (int y = -1; y < rows + 1; y++)
                 {
-                    //Choose a random tile from our array of floor tile prefabs and prepare to instantiate it.
-                    GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+                    GameObject toInstantiate;
 
                     //Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
                     if (x == -1 || x == columns || y == -1 || y == rows)
                     {
 						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
+                    }
+                    else
+                    {
+                        //Choose a random tile from our array of floor tile prefabs and prepare to instantiate it.
+                        if (tileArrays[y][x] == mapDictionary.)
+                        {
+                            
+                        }
+						GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
 					}
 
                     //Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
@@ -147,6 +158,8 @@ namespace Relay
         {
             var tilesString = tiles.ToString();
 	        var objectsString = objects.ToString();
+
+            mapDictionary = new MapDictionary(new List<char> { 'a', 'b' });
 
 			// Infers board size.
 			GetBoardSize(tilesString, out this.columns, out this.rows);
