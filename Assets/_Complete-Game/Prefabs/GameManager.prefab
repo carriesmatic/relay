@@ -43,7 +43,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelStartDelay: 2
   turnDelay: 0.1
-  playerFoodPoints: 100
   playersTurn: 1
 --- !u!1001 &100100000
 Prefab:
@@ -68,12 +67,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorTiles:
-  - {fileID: 1604281147703140, guid: a046e30bbc978490495054753598c55f, type: 2}
+  - {fileID: 1166782959307994, guid: a8e9dad89ed9347d1a491307e59316ec, type: 2}
   wallTiles:
-  - {fileID: 1989683273487562, guid: 0b16b9c511c354164aeb802376ee1c6d, type: 2}
+  - {fileID: 1228589730879964, guid: 8c1e7b269cae84f9e8df3b3c55aee2bd, type: 2}
   outerWallTiles:
   - {fileID: 1092240567088410, guid: 09abfd1da5e464a55bf871c5165d98c7, type: 2}
   animalTiles:
-  - {fileID: 1302570854167442, guid: 45c44593e620d4c85b09184a5fe500a5, type: 2}
+  - {fileID: 1444472973908610, guid: 4d4a2f28cb34f4c70a4ee1f0eb5be139, type: 2}
+  - {fileID: 1784108820887168, guid: 187b94a97e1f245babf095efd56279cf, type: 2}
   homeTiles:
   - {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188, type: 2}
