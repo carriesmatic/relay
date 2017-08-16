@@ -12,8 +12,6 @@ namespace Relay
 		public float levelStartDelay = 2f;						//Time to wait before starting level, in seconds.
 		public float turnDelay = 0.1f;							//Delay between each Player turn.
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
-		[HideInInspector] public bool playersTurn = true;		//Boolean to check if it's players turn, hidden in inspector but public.
-
 
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
@@ -106,18 +104,13 @@ namespace Relay
 		//Update is called every frame.
 		void Update()
 		{
-			//Check that playersTurn or enemiesMoving or doingSetup are not currently true.
-			if(playersTurn || doingSetup)
-
-				//If any of these are true, return and do not start MoveEnemies.
-				return;
 		}
 
-		//GameOver is called when the player reaches 0 food points
+		//call GameOver to end the game
 		public void GameOver()
 		{
 			//Set levelText to display number of levels passed and game over message
-			levelText.text = "After " + level + " days, you starved.";
+			levelText.text = "Game Over";
 
 			//Enable black background image gameObject.
 			levelImage.SetActive(true);
