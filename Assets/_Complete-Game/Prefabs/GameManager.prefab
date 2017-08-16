@@ -68,16 +68,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorTiles:
   - {fileID: 1676159027866326, guid: 9cd8562ee3a5949d7998c9c10ae86960, type: 2}
-  - {fileID: 1114293595905402, guid: fa16741960cab49c1aa0356f1ca42131, type: 2}
-  - {fileID: 1066451721169980, guid: fbc4fed7271064897b58b4cf66cbac6c, type: 2}
-  - {fileID: 1293616838285642, guid: a3c24436baa1347139452fd2ceb2dfb9, type: 2}
-  - {fileID: 1352378473974130, guid: 96b568baffd004ceebebe48250a758b2, type: 2}
   wallTiles:
   - {fileID: 1514981438112708, guid: 63043f27e16004284a671b6e0c25706b, type: 2}
   outerWallTiles:
   - {fileID: 1092240567088410, guid: 09abfd1da5e464a55bf871c5165d98c7, type: 2}
   animalTiles:
-  - {fileID: 1444472973908610, guid: 4d4a2f28cb34f4c70a4ee1f0eb5be139, type: 2}
+  - {fileID: 1977705597078246, guid: 552d7228e183d48d6ac3d62a15f17f33, type: 2}
   - {fileID: 1784108820887168, guid: 187b94a97e1f245babf095efd56279cf, type: 2}
   homeTiles:
   - {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188, type: 2}
