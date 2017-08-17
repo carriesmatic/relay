@@ -43,7 +43,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelStartDelay: 2
   turnDelay: 0.1
-  playersTurn: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -69,7 +68,7 @@ MonoBehaviour:
   floorTiles:
   - {fileID: 1676159027866326, guid: 9cd8562ee3a5949d7998c9c10ae86960, type: 2}
   wallTiles:
-  - {fileID: 1514981438112708, guid: 63043f27e16004284a671b6e0c25706b, type: 2}
+  - {fileID: 1382088065007244, guid: c0199b3e99f0042a78cae5a214e74c0f, type: 2}
   outerWallTiles:
   - {fileID: 1092240567088410, guid: 09abfd1da5e464a55bf871c5165d98c7, type: 2}
   animalTiles:
