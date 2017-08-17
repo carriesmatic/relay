@@ -74,7 +74,7 @@ namespace Relay
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
 			//Set the text of levelText to the string "Day" and append the current level number.
-			levelText.text = "Day " + level;
+			levelText.text = "Level " + level;
 
 			//Set levelImage to active blocking player's view of the game board during setup.
 			levelImage.SetActive(true);
@@ -82,11 +82,10 @@ namespace Relay
 			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
 			Invoke("HideLevelImage", levelStartDelay);
 
-			TextAsset board = Resources.Load("Levels/1") as TextAsset;
+			TextAsset board = Resources.Load("1") as TextAsset;
 
 			// Call the SetupScene function of the BoardManager script, pass it current level representation.
 			boardScript.SetupScene(board);
-
 		}
 
 

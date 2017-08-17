@@ -48,9 +48,9 @@ TagManager:
   - name: Floor
     uniqueID: 3131993583
     locked: 0
-  - name: Items
+  - name: Animals
     uniqueID: 1861650685
     locked: 0
-  - name: Units
+  - name: Player
     uniqueID: 3393972251
     locked: 0
