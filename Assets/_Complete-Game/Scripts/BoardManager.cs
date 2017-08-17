@@ -6,35 +6,31 @@ using Random = UnityEngine.Random; 		//Tells Random to use the Unity Engine rand
 namespace Relay
 {
     public class BoardManager : MonoBehaviour
-    {
-        // Using Serializable allows us to embed a class with sub properties in the inspector.
-        [Serializable]
+	{
+		public enum Animal
+		{
+			Charlie = 'a',
+			Sheila = 'b',
+			Spring = 'c',
+			Summer = 'd'
+		}	
+
         public class MapDictionary
         {
-            internal List<char> homes;
+			internal HashSet<char> animals = new HashSet<char>();
+            internal HashSet<char> homes = new HashSet<char>();
             internal char floor = '.';
             internal char outerWall = '*';
             internal char wall = '-';
             internal char player = '@';
 
-            public List<char> animals;
-
-            /// <summary>
-            /// Empty constructor if you want to use defaults.
-            /// </summary>
+            // Assignment constructor.
             public MapDictionary()
             {
-            }
-
-            // Assignment constructor.
-            public MapDictionary(List<char> animals)
-            {
-                this.animals = new List<char>();
-                this.homes = new List<char>();
-
                 // Make sure animals are lowercase. If not letter, ignore.
-                foreach (char animal in animals)
+				foreach (Animal enumAnimal in Enum.GetValues(typeof(Animal)))
                 {
+					var animal = (char) enumAnimal;
                     if (Char.IsLetter(animal))
                     {
                         this.animals.Add(Char.ToLower(animal));
@@ -103,12 +99,33 @@ namespace Relay
             {
                 // The boardObject looks like "@ 1,2"
                 var tileAndPosition = boardObject.Split(' ');
-				var tile = tileAndPosition[0];
+				var tileArray = tileAndPosition[0].ToCharArray();
+
+				if (tileArray.Length != 1)
+				{
+					continue;
+				}
+
+				var tile = tileArray[0];
                 var position = tileAndPosition[1].Split(',');
                 int y = Int32.Parse(position[0]);
                 int x = Int32.Parse(position[1]);
 
-                var toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+				GameObject toInstantiate;
+
+				if (mapDictionary.animals.Contains(tile))
+				{
+					toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+				}
+				else if (mapDictionary.homes.Contains(tile))
+				{
+					toInstantiate = homeTiles[Random.Range(0, homeTiles.Length)];
+				}
+				else
+				{
+					continue;
+				}
+
 	            GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
 			}
@@ -167,13 +184,14 @@ namespace Relay
         }
 
         //SetupScene initializes our level and calls the previous functions to lay out the game board
-        public void SetupScene(TextAsset tiles, TextAsset objects)
+        public void SetupScene(TextAsset board)
         {
 			// For some reason, there's an invisible whitespace character at the beginning of the TextAsset.
-			var tilesString = tiles.text.Trim();
-			var objectsString = objects.text.Trim();
+			var splitBoard = board.text.Split('&');
+			var tilesString = splitBoard[0].Trim();
+			var objectsString = splitBoard[1].Trim();
 
-            mapDictionary = new MapDictionary(new List<char> { 'a', 'b' });
+            mapDictionary = new MapDictionary();
 
 			// Infers board size.
 			GetBoardSize(tilesString, out this.columns, out this.rows);
