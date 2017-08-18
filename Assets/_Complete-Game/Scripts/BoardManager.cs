@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
  		//Tells Random to use the Unity Engine random number generator.
+using System.Text.RegularExpressions;
 
 namespace Relay
 {
@@ -116,53 +117,40 @@ namespace Relay
 		{
 			foreach (var boardObject in boardObjects.Split('\n'))
 			{
-				// The boardObject looks like "@ 1,2"
-				var tileAndPosition = boardObject.Split(' ');
-				var tileArray = tileAndPosition[0].ToCharArray();
+				var regex = new Regex(@"([a-zA-Z@]) (\d),(\d)");
+				var matches = regex.Matches(boardObject);
 
-				if (tileArray.Length != 1)
+				foreach (Match match in matches)
 				{
-					continue;
-				}
+					var tile = match.Groups[1].Value.ToCharArray()[0];
+					var x = Int32.Parse(match.Groups[2].Value);
+					var y = Int32.Parse(match.Groups[3].Value);
 
-				var tile = tileArray[0];
-				var position = tileAndPosition[1].Split(',');
-				int y = Int32.Parse(position[0]);
-				int x = Int32.Parse(position[1]);
-
-				GameObject toInstantiate;
-
-				if (mapDictionary.animals.Contains(tile))
-				{
-					toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+					LayoutObject(tile, x, y);
 				}
-				else if (mapDictionary.homes.Contains(tile))
-				{
-					toInstantiate = homeTiles[Random.Range(0, homeTiles.Length)];
-				}
-				else
-				{
-					continue;
-				}
-
-				GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-				instance.transform.SetParent(boardHolder);
 			}
 		}
 
 		// Instantiate the given object at the given vector.
 		void LayoutObject(char tile, int column, int row)
 		{
-			var tileArray = animalTiles;
+			GameObject toInstantiate;
 
-			//Choose a position for randomPosition by getting a random position from our list of available Vector3s stored in gridPosition
-			Vector3 position = new Vector3(column, row, 0f);
+			if (mapDictionary.animals.Contains(tile))
+			{
+				toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+			}
+			else if (mapDictionary.homes.Contains(tile))
+			{
+				toInstantiate = homeTiles[Random.Range(0, homeTiles.Length)];
+			}
+			else
+			{
+				return;
+			}
 
-			//Choose a random tile from tileArray and assign it to tileChoice
-			GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
-
-			//Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
-			Instantiate(tileChoice, position, Quaternion.identity);
+			GameObject instance = Instantiate(toInstantiate, new Vector3(column, row, 0f), Quaternion.identity) as GameObject;
+			instance.transform.SetParent(boardHolder);
 		}
 
 
