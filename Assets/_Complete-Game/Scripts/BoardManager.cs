@@ -20,33 +20,22 @@ namespace Relay
 			Summer = 'd'
 		}
 
-		public class MapDictionary
+		public static class Symbols
 		{
-			internal HashSet<char> animals = new HashSet<char>();
-			internal HashSet<char> homes = new HashSet<char>();
-			internal char floor = '.';
-			internal char outerWall = '*';
-			internal char wall = '-';
-			internal char player = '@';
-
-			// Assignment constructor.
-			public MapDictionary()
-			{
-				// Make sure animals are lowercase. If not letter, ignore.
-				foreach (Animal enumAnimal in Enum.GetValues(typeof(Animal)))
-				{
-					var animal = (char)enumAnimal;
-					if (Char.IsLetter(animal))
-					{
-						this.animals.Add(Char.ToLower(animal));
-						this.homes.Add(Char.ToUpper(animal));
-					}
-				}
-			}
+			public const char Floor = '.';
+			public const char OuterWall = '*';
+			public const char Wall = '-';
+			public const char Player = '@';
 		}
 
-		//The mapping dictionary for board symbols.
-		private MapDictionary mapDictionary = new MapDictionary();
+		// A hashset of chars that represent animals.
+		private HashSet<char> animals = new HashSet<char>();
+
+		// A hashset of chars that represent homes.
+		private HashSet<char> homes = new HashSet<char>();
+
+		// A dictionary that represents a mapping of a char to a GameObject.
+		private Dictionary<char, GameObject> prefabMap = new Dictionary<char, GameObject>();
 
 		//Number of columns in our game board.
 		private int columns = 0;
@@ -54,20 +43,18 @@ namespace Relay
 		//Number of rows in our game board.
 		private int rows = 0;
 
-		//Array of floor prefabs.
-		public GameObject[] floorTiles;
-
-		//Array of wall prefabs.
-		public GameObject[] wallTiles;
-
-		//Array of outer tile prefabs.
-		public GameObject[] outerWallTiles;
-
-		//Array of animal prefabs.
-		public GameObject[] animalTiles;
-
-		//Array of home prefabs.
-		public GameObject[] homeTiles;
+		public GameObject FloorTile;
+		public GameObject OuterWallTile;
+		public GameObject WallTile;
+		public GameObject Player;
+		public GameObject Charlie;
+		public GameObject Sheila;
+		public GameObject Spring;
+		public GameObject Summer;
+		public GameObject CharlieHome;
+		public GameObject SheilaHome;
+		public GameObject SpringHome;
+		public GameObject SummerHome;
 
 		//A variable to store a reference to the transform of our Board object.
 		private Transform boardHolder;
@@ -91,16 +78,12 @@ namespace Relay
 					//Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
 					if (x == -1 || x == columns || y == -1 || y == rows)
 					{
-						toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
-					}
-					else if (tileArrays[y][x] == mapDictionary.wall)
-					{
-						toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
+						toInstantiate = OuterWallTile;
 					}
 					else
 					{
-						// Instantiate a floor tile by default.
-						toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+						// Instantiate the appropriate tile.
+						toInstantiate = prefabMap[tileArrays[y][x]];
 					}
 
 					//Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
@@ -134,23 +117,12 @@ namespace Relay
 		// Instantiate the given object at the given vector.
 		void LayoutObject(char tile, int column, int row)
 		{
-			GameObject toInstantiate;
-
-			if (mapDictionary.animals.Contains(tile))
+			if (animals.Contains(tile) || homes.Contains(tile))
 			{
-				toInstantiate = animalTiles[Random.Range(0, animalTiles.Length)];
+				var toInstantiate = prefabMap[tile];
+				GameObject instance = Instantiate(toInstantiate, new Vector3(column, row, 0f), Quaternion.identity) as GameObject;
+				instance.transform.SetParent(boardHolder);
 			}
-			else if (mapDictionary.homes.Contains(tile))
-			{
-				toInstantiate = homeTiles[Random.Range(0, homeTiles.Length)];
-			}
-			else
-			{
-				return;
-			}
-
-			GameObject instance = Instantiate(toInstantiate, new Vector3(column, row, 0f), Quaternion.identity) as GameObject;
-			instance.transform.SetParent(boardHolder);
 		}
 
 
@@ -198,7 +170,7 @@ namespace Relay
 			var tilesString = splitBoard[0].Trim();
 			var objectsString = splitBoard[1].Trim();
 
-			mapDictionary = new MapDictionary();
+			SetupMapSymbols();
 
 			// Infers board size.
 			GetBoardSize(tilesString, out this.columns, out this.rows);
@@ -208,6 +180,38 @@ namespace Relay
 
 			// Creates the player, animals, and homes.
 			SetupBoardObjects(objectsString);
+		}
+
+		/// <summary>
+		/// Sets up map symbol translation dictionary.
+		/// </summary>
+		public void SetupMapSymbols()
+		{
+			// Make sure animals are lowercase. If not letter, ignore.
+			foreach (Animal enumAnimal in Enum.GetValues(typeof(Animal)))
+			{
+				var animal = (char) enumAnimal;
+				if (Char.IsLetter(animal))
+				{
+					this.animals.Add(Char.ToLower(animal));
+					this.homes.Add(Char.ToUpper(animal));
+				}
+			}
+
+			prefabMap[Symbols.Floor] = FloorTile;
+			prefabMap[Symbols.OuterWall] = OuterWallTile;
+			prefabMap[Symbols.Wall] = WallTile;
+			prefabMap[Symbols.Player] = Player;
+
+			prefabMap[(char) Animal.Charlie] = Charlie;
+			prefabMap[(char) Animal.Sheila] = Sheila;
+			prefabMap[(char) Animal.Spring] = Spring;
+			prefabMap[(char) Animal.Summer] = Summer;
+
+			prefabMap[Char.ToUpper((char) Animal.Charlie)] = CharlieHome;
+			prefabMap[Char.ToUpper((char) Animal.Sheila)] = SheilaHome;
+			prefabMap[Char.ToUpper((char) Animal.Spring)] = SpringHome;
+			prefabMap[Char.ToUpper((char) Animal.Summer)] = SummerHome;
 		}
 	}
 }
