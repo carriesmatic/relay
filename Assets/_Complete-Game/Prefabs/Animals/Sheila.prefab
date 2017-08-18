@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4588383288867048}
   - component: {fileID: 212204357399114050}
   - component: {fileID: 61263280300621160}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sheila
   m_TagString: Untagged
   m_Icon: {fileID: 0}
