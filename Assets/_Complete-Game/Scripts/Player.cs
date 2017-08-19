@@ -5,14 +5,71 @@ using UnityEngine.SceneManagement;
 
 namespace Relay
 {
+	// A hand might have a held animal, and has a UI indicator for it.
+	public class Hand
+	{
+		private Animal heldAnimal = null;
+		readonly GameObject handUIRoot = null;
+		private Sprite bearSprite;
+
+		public Hand(GameObject handUIRoot, Sprite bearSprite)
+		{
+			this.handUIRoot = handUIRoot;
+			this.bearSprite = bearSprite;
+		}
+
+		public bool tryHold(Animal a)
+		{
+			if (heldAnimal == null)
+			{
+				heldAnimal = a;
+				// a.transform.parent = hands[this.heldAnimals.Count - 1].transform;
+				a.transform.gameObject.SetActive (false);
+				updateUI ();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool isEmpty()
+		{
+			return this.heldAnimal == null;
+		}
+
+		// heldAnimal existing => the UIRoot's HeldAnimalImage's
+		// Image source is the heldAnimal's image
+		// heldAnimal null => HeldAnimalImage is inactive
+		private void updateUI()
+		{
+			GameObject heldAnimalImage = handUIRoot.transform.Find ("HeldAnimalImage").gameObject;
+			if (heldAnimal != null && !heldAnimalImage.activeSelf)
+			{
+				// activate heldAnimalImage
+				heldAnimalImage.SetActive (true);
+				Image image = heldAnimalImage.GetComponent<Image>();
+				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer> ();
+				image.sprite = animalSpriteRenderer.sprite;
+			}
+			else if (heldAnimal == null && heldAnimalImage.activeSelf)
+			{
+				// deactivate heldAnimalImage
+				heldAnimalImage.SetActive (false);
+			}
+		}
+	}
 	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 	public class Player : MovingObject
 	{
 		// model state
-		private readonly List<Animal> heldAnimals = new List<Animal>();
+		private Hand leftHand;
+		private Hand rightHand;
+
+		public Sprite bearSprite;
 
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
-		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip gameOverSound;				//Audio clip to play when player dies.
@@ -26,6 +83,8 @@ namespace Relay
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
+			leftHand = new Hand (GameObject.Find ("LeftHand"), bearSprite);
+			rightHand = new Hand (GameObject.Find ("RightHand"), bearSprite);
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 
@@ -100,8 +159,6 @@ namespace Relay
 			//Check if we have a non-zero value for horizontal or vertical
 			if(horizontal != 0 || vertical != 0)
 			{
-				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
-				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
 				AttemptMove (horizontal, vertical);
 			}
 		}
@@ -163,30 +220,27 @@ namespace Relay
 			//and not load all the scene object in the current scene.
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
-
+	
 		public bool TryPickUp (Animal a)
 		{
 			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
-			if (this.heldAnimals.Count > 2)
-			{
-				// hands are full
-				return false;
-			}
-			else if (distanceToAnimal > 1)
+			if (distanceToAnimal > 1)
 			{
 				// animal is too far away to grab
 				return false;
 			}
-			else if (/* TODO animal is not in the map */ false)
+
+			if (leftHand.isEmpty ())
 			{
-				return false;
+				return leftHand.tryHold (a);
 			}
-			else
+			else if (rightHand.isEmpty ())
 			{
-				this.heldAnimals.Add (a);
-				a.transform.gameObject.SetActive (false);
-				return true;
+				return rightHand.tryHold (a);
 			}
+
+			// hands are full
+			return false;
 		}
 
 		/**
@@ -196,19 +250,22 @@ namespace Relay
 		 * 
 		 * returns true if successfully dropped, false if not
 		 */
-		public bool TryDrop (Animal a, int dropX, int dropY)
-		{
-			if (heldAnimals.Contains (a))
-			{
-				heldAnimals.Remove (a);
-				// TODO somehow add the animal back onto the Level at dropX dropY
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+//		public bool TryDrop (Animal a, int dropX, int dropY)
+//		{
+//			if (heldAnimals.Contains (a))
+//			{
+//				heldAnimals.Remove (a);
+//				// a.transform.parent = GameManager.instance.getBoardManager ().boardHolder;
+//				a.transform.gameObject.SetActive (true);
+//				a.transform.position.x = dropX;
+//				a.transform.position.y = dropY;
+//				return true;
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
 	}
 }
 

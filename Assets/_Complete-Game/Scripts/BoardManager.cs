@@ -57,7 +57,7 @@ namespace Relay
 		public GameObject SummerHome;
 
 		//A variable to store a reference to the transform of our Board object.
-		private Transform boardHolder;
+		public Transform boardHolder;
 
 		//Sets up the outer walls and floor (background) of the game board.
 		void SetupBoardTiles(string tiles)
