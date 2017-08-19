@@ -17,7 +17,11 @@ namespace Relay
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		private int level = 1;									//Current level number, expressed in game as "Day 1".
+		private int turn = 0;									//Current turn number.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
+
+		public bool IsDay { get { return (turn % 16) < 8; } }
+		public bool IsNight { get { return (turn % 16) >= 8; } }
 
 		//Awake is always called before any Start functions
 		void Awake()
@@ -116,6 +120,11 @@ namespace Relay
 			//Disable this GameManager.
 			enabled = false;
 		}
+
+		public void TickTime()
+		{
+			turn++;
+		}	
 	}
 }
 

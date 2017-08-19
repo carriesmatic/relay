@@ -23,7 +23,6 @@ namespace Relay
 		private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 		#endif
 
-
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
@@ -34,12 +33,10 @@ namespace Relay
 			base.Start ();
 		}
 
-
 		//This function is called when the behaviour becomes disabled or inactive.
 		private void OnDisable ()
 		{
 		}
-
 
 		private void Update ()
 		{
@@ -127,6 +124,8 @@ namespace Relay
 			//If Move returns true, meaning Player was able to move into an empty space.
 			if (Move (xDir, yDir, out hit)) 
 			{
+				GameManager.instance.TickTime();
+
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
 			}
@@ -162,15 +161,12 @@ namespace Relay
 			}
 		}
 
-
-		//Restart reloads the scene when called.
 		private void Restart ()
 		{
 			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
 			//and not load all the scene object in the current scene.
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
-
 
 		public bool TryPickUp (Animal a)
 		{
