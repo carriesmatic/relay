@@ -5,14 +5,66 @@ using UnityEngine.SceneManagement;
 
 namespace Relay
 {
+	// A hand might have a held animal, and has a UI indicator for it.
+	[System.Serializable]
+	public class Hand
+	{
+		private Animal heldAnimal = null;
+		readonly GameObject handUIRoot = null;
+
+		public Hand (GameObject handUIRoot)
+		{
+			this.handUIRoot = handUIRoot;
+		}
+
+		public bool TryHold (Animal a)
+		{
+			if (heldAnimal == null)
+			{
+				heldAnimal = a;
+				a.transform.gameObject.SetActive (false);
+				updateUI ();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool IsEmpty()
+		{
+			return this.heldAnimal == null;
+		}
+
+		// heldAnimal existing => the UIRoot's HeldAnimalImage's
+		// Image source is the heldAnimal's image
+		// heldAnimal null => HeldAnimalImage is inactive
+		private void updateUI()
+		{
+			GameObject heldAnimalImage = handUIRoot.transform.Find ("HeldAnimalImage").gameObject;
+			if (heldAnimal != null && !heldAnimalImage.activeSelf)
+			{
+				// activate heldAnimalImage
+				heldAnimalImage.SetActive (true);
+				Image image = heldAnimalImage.GetComponent<Image>();
+				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer> ();
+				image.sprite = animalSpriteRenderer.sprite;
+			}
+			else if (heldAnimal == null && heldAnimalImage.activeSelf)
+			{
+				// deactivate heldAnimalImage
+				heldAnimalImage.SetActive (false);
+			}
+		}
+	}
 	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 	public class Player : MovingObject
 	{
-		// model state
-		private readonly List<Animal> heldAnimals = new List<Animal>();
+		private Hand leftHand;
+		private Hand rightHand;
 
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
-		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip gameOverSound;				//Audio clip to play when player dies.
@@ -26,16 +78,13 @@ namespace Relay
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
+			leftHand = new Hand (GameObject.Find ("LeftHand"));
+			rightHand = new Hand (GameObject.Find ("RightHand"));
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 
 			//Call the Start function of the MovingObject base class.
 			base.Start ();
-		}
-
-		//This function is called when the behaviour becomes disabled or inactive.
-		private void OnDisable ()
-		{
 		}
 
 		private void Update ()
@@ -105,35 +154,26 @@ namespace Relay
 			//Check if we have a non-zero value for horizontal or vertical
 			if(horizontal != 0 || vertical != 0)
 			{
-				AttemptMove<MonoBehaviour>(horizontal, vertical);
+				AttemptMove (horizontal, vertical);
 			}
 		}
 
-		//AttemptMove overrides the AttemptMove function in the base class MovingObject
-		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
-		protected override void AttemptMove <T> (int xDir, int yDir)
+		protected override void OnMoveBegan()
 		{
-			//Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
-			base.AttemptMove <T> (xDir, yDir);
+			GameManager.instance.EndTurn();
 
-			//Hit allows us to reference the result of the Linecast done in Move.
-			RaycastHit2D hit;
-
-			//If Move returns true, meaning Player was able to move into an empty space.
-			if (Move (xDir, yDir, out hit)) 
+			//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
+			SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
+		}
+			
+		protected override void OnMoveBlocked (Transform component)
+		{
+			Animal animal = component.GetComponent<Animal> ();
+			if (animal != null)
 			{
-				GameManager.instance.EndTurn();
-
-				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
-				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
+				// this is an animal; pick it up if we can
+				TryPickUp(animal);
 			}
-		}
-
-
-		//OnCantMove overrides the abstract function OnCantMove in MovingObject.
-		//It takes a generic parameter T which in the case of Player is a Wall which the player can attack and destroy.
-		protected override void OnCantMove <T> (T component)
-		{
 		}
 
 		protected override void AnimateDirection(Direction d)
@@ -179,25 +219,23 @@ namespace Relay
 		public bool TryPickUp (Animal a)
 		{
 			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
-			if (this.heldAnimals.Count > 2)
-			{
-				// hands are full
-				return false;
-			}
-			else if (distanceToAnimal > 1)
+			if (distanceToAnimal > 1)
 			{
 				// animal is too far away to grab
 				return false;
 			}
-			else if (/* TODO animal is not in the map */ false)
+
+			if (leftHand.IsEmpty ())
 			{
-				return false;
+				return leftHand.TryHold (a);
 			}
-			else
+			else if (rightHand.IsEmpty ())
 			{
-				this.heldAnimals.Add (a);
-				return true;
+				return rightHand.TryHold (a);
 			}
+
+			// hands are full
+			return false;
 		}
 
 		/**
@@ -207,19 +245,22 @@ namespace Relay
 		 * 
 		 * returns true if successfully dropped, false if not
 		 */
-		public bool TryDrop (Animal a, int dropX, int dropY)
-		{
-			if (heldAnimals.Contains (a))
-			{
-				heldAnimals.Remove (a);
-				// TODO somehow add the animal back onto the Level at dropX dropY
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+//		public bool TryDrop (Animal a, int dropX, int dropY)
+//		{
+//			if (heldAnimals.Contains (a))
+//			{
+//				heldAnimals.Remove (a);
+//				// a.transform.parent = GameManager.instance.getBoardManager ().boardHolder;
+//				a.transform.gameObject.SetActive (true);
+//				a.transform.position.x = dropX;
+//				a.transform.position.y = dropY;
+//				return true;
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
 	}
 }
 

@@ -109,6 +109,10 @@ namespace Relay
 		{
 		}
 
+		public BoardManager getBoardManager() {
+			return this.boardScript;
+		}
+
 		//call GameOver to end the game
 		public void GameOver()
 		{
