@@ -6,24 +6,22 @@ using UnityEngine.SceneManagement;
 namespace Relay
 {
 	// A hand might have a held animal, and has a UI indicator for it.
+	[System.Serializable]
 	public class Hand
 	{
 		private Animal heldAnimal = null;
 		readonly GameObject handUIRoot = null;
-		private Sprite bearSprite;
 
-		public Hand(GameObject handUIRoot, Sprite bearSprite)
+		public Hand (GameObject handUIRoot)
 		{
 			this.handUIRoot = handUIRoot;
-			this.bearSprite = bearSprite;
 		}
 
-		public bool tryHold(Animal a)
+		public bool TryHold (Animal a)
 		{
 			if (heldAnimal == null)
 			{
 				heldAnimal = a;
-				// a.transform.parent = hands[this.heldAnimals.Count - 1].transform;
 				a.transform.gameObject.SetActive (false);
 				updateUI ();
 				return true;
@@ -34,7 +32,7 @@ namespace Relay
 			}
 		}
 
-		public bool isEmpty()
+		public bool IsEmpty()
 		{
 			return this.heldAnimal == null;
 		}
@@ -63,11 +61,8 @@ namespace Relay
 	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 	public class Player : MovingObject
 	{
-		// model state
 		private Hand leftHand;
 		private Hand rightHand;
-
-		public Sprite bearSprite;
 
 		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
@@ -83,8 +78,8 @@ namespace Relay
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
-			leftHand = new Hand (GameObject.Find ("LeftHand"), bearSprite);
-			rightHand = new Hand (GameObject.Find ("RightHand"), bearSprite);
+			leftHand = new Hand (GameObject.Find ("LeftHand"));
+			rightHand = new Hand (GameObject.Find ("RightHand"));
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 
@@ -220,7 +215,7 @@ namespace Relay
 			//and not load all the scene object in the current scene.
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
-	
+
 		public bool TryPickUp (Animal a)
 		{
 			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
@@ -230,13 +225,13 @@ namespace Relay
 				return false;
 			}
 
-			if (leftHand.isEmpty ())
+			if (leftHand.IsEmpty ())
 			{
-				return leftHand.tryHold (a);
+				return leftHand.TryHold (a);
 			}
-			else if (rightHand.isEmpty ())
+			else if (rightHand.IsEmpty ())
 			{
-				return rightHand.tryHold (a);
+				return rightHand.TryHold (a);
 			}
 
 			// hands are full
