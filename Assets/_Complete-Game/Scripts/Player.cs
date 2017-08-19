@@ -146,6 +146,24 @@ namespace Relay
 			animator.SetTrigger ("playerChop");
 		}
 
+		protected override void AnimateDirection(Direction d)
+		{
+			switch (d)
+			{
+			case Direction.Up:
+				animator.SetTrigger("walkBack");
+				break;
+			case Direction.Down:
+				animator.SetTrigger("walkFront");
+				break;
+			case Direction.Left:
+				animator.SetTrigger("walkLeft");
+				break;
+			case Direction.Right:
+				animator.SetTrigger("walkRight");
+				break;
+			}
+		}
 
 		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
 		private void OnTriggerEnter2D (Collider2D other)
