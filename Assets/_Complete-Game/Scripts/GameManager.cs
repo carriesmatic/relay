@@ -123,7 +123,22 @@ namespace Relay
 
 		public void TickTime()
 		{
+			string dayText = "Day n_n";
+			string nightText = "Night u_u";
+
 			turn++;
+
+			var phaseText = GameObject.Find("PhaseIndicator").GetComponent<Text>();
+
+			if (IsDay && !(phaseText.text == dayText))
+			{
+				phaseText.text = dayText;
+			}
+
+			if (IsNight && !(phaseText.text == nightText))
+			{
+				phaseText.text = nightText;
+			}
 		}	
 	}
 }
