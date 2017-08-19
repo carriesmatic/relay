@@ -122,7 +122,7 @@ namespace Relay
 			enabled = false;
 		}
 
-		public void TickTime()
+		public void EndTurn()
 		{
 			string dayText = "Day n_n";
 			string nightText = "Night u_u";

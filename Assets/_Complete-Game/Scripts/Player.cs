@@ -124,7 +124,7 @@ namespace Relay
 			//If Move returns true, meaning Player was able to move into an empty space.
 			if (Move (xDir, yDir, out hit)) 
 			{
-				GameManager.instance.TickTime();
+				GameManager.instance.EndTurn();
 
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
