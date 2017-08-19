@@ -37,11 +37,11 @@ namespace Relay
 		// A dictionary that represents a mapping of a char to a GameObject.
 		private Dictionary<char, GameObject> prefabMap = new Dictionary<char, GameObject>();
 
-		//Number of columns in our game board.
-		private int columns = 0;
+		//Width of our game board (usually 10 tiles).
+		private int boardWidth = 0;
 
-		//Number of rows in our game board.
-		private int rows = 0;
+		//Height of our game board (usually 7 tiles).
+		private int boardHeight = 0;
 
 		public GameObject FloorTile;
 		public GameObject OuterWallTile;
@@ -60,23 +60,25 @@ namespace Relay
 		private Transform boardHolder;
 
 		//Sets up the outer walls and floor (background) of the game board.
-		void SetupBoardLandscape(string tiles)
+		void SetupBoardTiles(string tiles)
 		{
 			var tileArrays = tiles.Split('\n');
+			// the tiles array is read from ASCII top-to-bottom, but Unity's y axis is bottom-to-top, so reverse order
+			Array.Reverse (tileArrays);
 
 			//Instantiate Board and set boardHolder to its transform.
 			boardHolder = new GameObject("Board").transform;
 
-			//Loop along x axis, starting from -1 (to fill corner) with floor or outerwall edge tiles.
-			for (int x = -1; x < columns + 1; x++)
+			//Loop along y axis (+ goes up), starting from -1 to place floor or outerwall tiles.
+			for (int y = -1; y < boardHeight + 1; y++)
 			{
-				//Loop along y axis, starting from -1 to place floor or outerwall tiles.
-				for (int y = -1; y < rows + 1; y++)
+				//Loop along x axis (+ goes right), starting from -1 (to fill corner) with floor or outerwall edge tiles.
+				for (int x = -1; x < boardWidth + 1; x++)
 				{
 					GameObject toInstantiate;
 
 					//Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
-					if (x == -1 || x == columns || y == -1 || y == rows)
+					if (x == -1 || x == boardWidth || y == -1 || y == boardHeight)
 					{
 						toInstantiate = OuterWallTile;
 					}
@@ -115,21 +117,21 @@ namespace Relay
 		}
 
 		// Instantiate the given object at the given vector.
-		void LayoutObject(char tile, int column, int row)
+		void LayoutObject(char boardObject, int x, int y)
 		{
-			if (animals.Contains(tile) || homes.Contains(tile))
+			if (animals.Contains(boardObject) || homes.Contains(boardObject))
 			{
-				var toInstantiate = prefabMap[tile];
-				GameObject instance = Instantiate(toInstantiate, new Vector3(column, row, 0f), Quaternion.identity) as GameObject;
+				var toInstantiate = prefabMap[boardObject];
+				GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 				instance.transform.SetParent(boardHolder);
 			}
 		}
 
 
-		void GetBoardSize(string level, out int columns, out int rows)
+		void GetBoardSize(string level, out int boardWidth, out int boardHeight)
 		{
-			columns = 0;
-			rows = 0;
+			boardWidth = 0;
+			boardHeight = 0;
 
 			string[] levelRows = level.Split('\n');
 
@@ -138,8 +140,8 @@ namespace Relay
 				return;
 			}
 
-			rows = levelRows.Length;
-			columns = levelRows.Length == 0 ? 0 : levelRows[0].Length;
+			boardHeight = levelRows.Length;
+			boardWidth = levelRows.Length == 0 ? 0 : levelRows[0].Length;
 		}
 
 		bool CheckRectangularBoard(string[] levelRows)
@@ -173,10 +175,10 @@ namespace Relay
 			SetupMapSymbols();
 
 			// Infers board size.
-			GetBoardSize(tilesString, out this.columns, out this.rows);
+			GetBoardSize(tilesString, out this.boardWidth, out this.boardHeight);
 
 			// Creates the landscape.
-			SetupBoardLandscape(tilesString);
+			SetupBoardTiles(tilesString);
 
 			// Creates the player, animals, and homes.
 			SetupBoardObjects(objectsString);
