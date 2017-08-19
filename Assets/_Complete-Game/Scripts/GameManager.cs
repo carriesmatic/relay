@@ -20,8 +20,9 @@ namespace Relay
 		private int turn = 0;									//Current turn number.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
-		public bool IsDay { get { return (turn % 16) < 8; } }
-		public bool IsNight { get { return (turn % 16) >= 8; } }
+		public const int phaseDuration = 8;
+		public bool IsDay { get { return (turn % (phaseDuration * 2)) < phaseDuration; } }
+		public bool IsNight { get { return (turn % (phaseDuration * 2)) >= phaseDuration; } }
 
 		//Awake is always called before any Start functions
 		void Awake()
