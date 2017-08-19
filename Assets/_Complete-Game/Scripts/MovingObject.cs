@@ -6,6 +6,11 @@ namespace Relay
 	//The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class.
 	public abstract class MovingObject : MonoBehaviour
 	{
+		public enum Direction
+		{
+			Up, Down, Left, Right
+		}
+
 		public LayerMask blockingLayer;			//Layer on which collision will be checked.
 		private bool isMoving = false;          //Is this object currently moving?
 		public float moveTime = 0.1f;			//Time it will take object to move, in seconds.
@@ -13,8 +18,9 @@ namespace Relay
 		private BoxCollider2D boxCollider; 		//The BoxCollider2D component attached to this object.
 		private Rigidbody2D rb2D;				//The Rigidbody2D component attached to this object.
 		private float inverseMoveTime;			//Used to make movement more efficient.
-		
-		
+
+		public Direction moveDirection = Direction.Down;
+
 		//Protected, virtual functions can be overridden by inheriting classes.
 		protected virtual void Start ()
 		{
@@ -31,7 +37,6 @@ namespace Relay
 		public bool isCurrentlyMoving() {
 			return isMoving;
 		}
-		
 
 		//Move returns true if it is able to move and false if not.
 		//hit != null <=> Move returns false
@@ -97,6 +102,32 @@ namespace Relay
 		public void AttemptMove (int xDir, int yDir)
 		{
 			RaycastHit2D hit;
+			Direction newMoveDirection = moveDirection;
+
+			if (xDir > 0)
+			{
+				newMoveDirection = Direction.Right;
+			}
+			else if (xDir < 0)
+			{
+				newMoveDirection = Direction.Left;
+			}
+			else if (yDir > 0)
+			{
+				newMoveDirection = Direction.Up;
+			}
+			else if (yDir < 0)
+			{
+				newMoveDirection = Direction.Down;
+			}
+
+			if (moveDirection != newMoveDirection)
+			{
+				moveDirection = newMoveDirection;
+				AnimateDirection(moveDirection);
+			}
+
+			//Set canMove to true if Move was successful, false if failed.
 			bool canMove = Move (xDir, yDir, out hit);
 
 			if (canMove)
@@ -120,5 +151,7 @@ namespace Relay
 		/// an animal).
 		/// </summary>
 		protected abstract void OnMoveBlocked (Transform component);
+
+		protected abstract void AnimateDirection(Direction d);
 	}
 }
