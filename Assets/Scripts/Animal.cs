@@ -9,7 +9,13 @@ namespace Relay
 	/// </summary>
 	public class Animal : MonoBehaviour
 	{
-		public Home WantedHome;
+		public string Name;
+
+		public bool IsInHome()
+		{
+			Home parentHome = transform.parent.GetComponent<Home> ();
+			return parentHome != null && parentHome.HomeFor == Name;
+		}
 	}
 }
 

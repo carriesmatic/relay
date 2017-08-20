@@ -16,19 +16,7 @@ namespace Relay
 	/// </summary>
 	public class Home : MonoBehaviour
 	{
-		private Animal occupant;
-
-		/**
-		 * Does NOT do checking to see if the animal/home pairing is correct; do that in the callee!
-		 */
-		public bool Fill(Animal occupant) {
-			if (this.occupant == null) {
-				this.occupant = occupant;
-				return true;
-			} else {
-				return false;
-			}
-		}
+		public string HomeFor;
 	}
 }
 

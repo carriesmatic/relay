@@ -18,7 +18,6 @@ namespace Relay
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		private int level = 1;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
-		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
 		public const int phaseDuration = 8;
 		public bool IsDay { get { return (turn % (phaseDuration * 2)) < phaseDuration; } }
@@ -69,27 +68,14 @@ namespace Relay
 		//Initializes the game for each level.
 		void InitGame()
 		{
-			//While doingSetup is true the player can't move, prevent player from moving while title card is up.
-			doingSetup = true;
-
-			//Get a reference to our image LevelImage by finding it by name.
 			levelImage = GameObject.Find("LevelImage");
-
-			//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
-
-			//Set the text of levelText to the string "Day" and append the current level number.
 			levelText.text = "Level " + level;
-
-			//Set levelImage to active blocking player's view of the game board during setup.
 			levelImage.SetActive(true);
 
-			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
 			Invoke("HideLevelImage", levelStartDelay);
 
-			TextAsset board = Resources.Load("1") as TextAsset;
-
-			// Call the SetupScene function of the BoardManager script, pass it current level representation.
+			TextAsset board = Resources.Load(level.ToString()) as TextAsset;
 			boardScript.SetupScene(board);
 		}
 
@@ -99,50 +85,53 @@ namespace Relay
 		{
 			//Disable the levelImage gameObject.
 			levelImage.SetActive(false);
-
-			//Set doingSetup to false allowing player to move again.
-			doingSetup = false;
-		}
-
-		//Update is called every frame.
-		void Update()
-		{
 		}
 
 		public BoardManager getBoardManager() {
 			return this.boardScript;
 		}
 
-		//call GameOver to end the game
-		public void GameOver()
+		//call this to test if the game is over
+		public bool TestGameWon()
 		{
-			//Set levelText to display number of levels passed and game over message
-			levelText.text = "Game Over";
+			if (boardScript.IsGameWon ())
+			{
+				//Set levelText to display number of levels passed and game over message
+				levelText.text = "You beat Level " + level + " in " + turn + " turns!";
 
-			//Enable black background image gameObject.
-			levelImage.SetActive(true);
+				//Enable black background image gameObject.
+				levelImage.SetActive (true);
 
-			//Disable this GameManager.
-			enabled = false;
+				//Disable this GameManager.
+				enabled = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		public void EndTurn()
 		{
+			if (TestGameWon ())
+			{
+				return;
+			}
 			string dayText = "Day n_n";
 			string nightText = "Night u_u";
 
 			turn++;
+			string turnText = " (turn " + turn + ")";
 
 			var phaseText = GameObject.Find("PhaseIndicator").GetComponent<Text>();
 
-			if (IsDay && !(phaseText.text == dayText))
+			if (IsDay)
 			{
-				phaseText.text = dayText;
-			}
-
-			if (IsNight && !(phaseText.text == nightText))
+				phaseText.text = dayText + turnText;
+			} else
 			{
-				phaseText.text = nightText;
+				phaseText.text = nightText + turnText;
 			}
 		}	
 	}
