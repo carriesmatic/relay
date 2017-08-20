@@ -62,7 +62,6 @@ namespace Relay
 		public Transform boardHolder;
 
 		public List<Animal> currentBoardAnimals;
-		public List<Home> currentBoardHomes;
 
 		// The game is won when all animals in the board have gone into their homes.
 		public bool IsGameWon ()
@@ -112,7 +111,6 @@ namespace Relay
 		void SetupBoardObjects(string boardObjects)
 		{
 			currentBoardAnimals = new List<Animal> ();
-			currentBoardHomes = new List<Home> ();
 			foreach (var boardObject in boardObjects.Split('\n'))
 			{
 				var regex = new Regex(@"([a-zA-Z@]) (\d),(\d)");
