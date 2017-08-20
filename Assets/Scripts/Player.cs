@@ -48,9 +48,17 @@ namespace Relay
 			return false;
 		}
 
-		public Animal GetAnimal()
+		public bool TryDrop (int x, int y) 
 		{
-			return heldAnimal;
+			if (heldAnimal != null)
+			{
+				heldAnimal.transform.gameObject.SetActive (true);
+				heldAnimal.transform.position = new Vector2 (x, y);
+				heldAnimal = null;
+				updateUI ();
+				return true;
+			}
+			return false;
 		}
 
 		public bool IsEmpty()
@@ -173,9 +181,20 @@ namespace Relay
 
 			#endif //End of mobile platform dependendent compilation section started above with #elif
 			//Check if we have a non-zero value for horizontal or vertical
-			if(horizontal != 0 || vertical != 0)
+			if (horizontal != 0 || vertical != 0)
 			{
 				AttemptMove (horizontal, vertical);
+			}
+			else
+			{
+				if (Input.GetButtonDown ("LeftHand"))
+				{
+					leftHand.TryDrop ((int) transform.position.x, (int) transform.position.y);
+				}
+				else if (Input.GetButtonDown ("RightHand"))
+				{
+					rightHand.TryDrop ((int) transform.position.x, (int) transform.position.y);
+				}
 			}
 		}
 
@@ -284,30 +303,6 @@ namespace Relay
 			// hands are full
 			return false;
 		}
-
-		/**
-		 * Is "dropping" an animal off the same as putting it into a home?
-		 * 
-		 * Do animals automatically enter their home, or do you need to drop it?
-		 * 
-		 * returns true if successfully dropped, false if not
-		 */
-//		public bool TryDrop (Animal a, int dropX, int dropY)
-//		{
-//			if (heldAnimals.Contains (a))
-//			{
-//				heldAnimals.Remove (a);
-//				// a.transform.parent = GameManager.instance.getBoardManager ().boardHolder;
-//				a.transform.gameObject.SetActive (true);
-//				a.transform.position.x = dropX;
-//				a.transform.position.y = dropY;
-//				return true;
-//			}
-//			else
-//			{
-//				return false;
-//			}
-//		}
 	}
 }
 
