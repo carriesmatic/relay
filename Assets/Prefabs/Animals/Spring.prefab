@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4070193232826632}
   - component: {fileID: 212883244052493972}
   - component: {fileID: 61812357294402858}
+  - component: {fileID: 114605740861741738}
   m_Layer: 8
   m_Name: Spring
   m_TagString: Animal
@@ -66,6 +67,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &114605740861741738
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1564241391048084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7180ecc39b05a54c88750ec609c3b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Spring
 --- !u!212 &212883244052493972
 SpriteRenderer:
   m_ObjectHideFlags: 1
