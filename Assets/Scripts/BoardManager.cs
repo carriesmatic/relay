@@ -13,7 +13,7 @@ namespace Relay
 {
 	public class BoardManager : MonoBehaviour
 	{
-		public enum Animal
+		public enum AnimalSymbols
 		{
 			Charlie = 'a',
 			Sheila = 'b',
@@ -26,6 +26,7 @@ namespace Relay
 			public const char Floor = '.';
 			public const char OuterWall = '*';
 			public const char Wall = '-';
+			public const char Chasm = '~';
 			public const char Player = '@';
 		}
 
@@ -47,6 +48,7 @@ namespace Relay
 		public GameObject FloorTile;
 		public GameObject OuterWallTile;
 		public GameObject WallTile;
+		public GameObject ChasmTile;
 		public GameObject Player;
 		public GameObject Charlie;
 		public GameObject Sheila;
@@ -59,6 +61,14 @@ namespace Relay
 
 		//A variable to store a reference to the transform of our Board object.
 		public Transform boardHolder;
+
+		public List<Animal> currentBoardAnimals;
+
+		// The game is won when all animals in the board have gone into their homes.
+		public bool IsGameWon ()
+		{
+			return currentBoardAnimals.TrueForAll(animal => animal.IsInHome ());
+		}
 
 		//Sets up the outer walls and floor (background) of the game board.
 		void SetupBoardTiles(string tiles)
@@ -108,6 +118,7 @@ namespace Relay
 
 		void SetupBoardObjects(string boardObjects)
 		{
+			currentBoardAnimals = new List<Animal> ();
 			foreach (var boardObject in boardObjects.Split('\n'))
 			{
 				var regex = new Regex(@"([a-zA-Z@]) (\d),(\d)");
@@ -132,6 +143,11 @@ namespace Relay
 				var toInstantiate = prefabMap[boardObject];
 				GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 				instance.transform.SetParent(boardHolder);
+				Animal animalComponent = instance.GetComponent<Animal> ();
+				if (animalComponent != null)
+				{
+					currentBoardAnimals.Add (animalComponent);
+				}
 			}
 		}
 
@@ -198,7 +214,7 @@ namespace Relay
 		public void SetupMapSymbols()
 		{
 			// Make sure animals are lowercase. If not letter, ignore.
-			foreach (Animal enumAnimal in Enum.GetValues(typeof(Animal)))
+			foreach (AnimalSymbols enumAnimal in Enum.GetValues(typeof(AnimalSymbols)))
 			{
 				var animal = (char) enumAnimal;
 				if (Char.IsLetter(animal))
@@ -211,17 +227,18 @@ namespace Relay
 			prefabMap[Symbols.Floor] = FloorTile;
 			prefabMap[Symbols.OuterWall] = OuterWallTile;
 			prefabMap[Symbols.Wall] = WallTile;
+			prefabMap[Symbols.Chasm] = ChasmTile;
 			prefabMap[Symbols.Player] = Player;
 
-			prefabMap[(char) Animal.Charlie] = Charlie;
-			prefabMap[(char) Animal.Sheila] = Sheila;
-			prefabMap[(char) Animal.Spring] = Spring;
-			prefabMap[(char) Animal.Summer] = Summer;
+			prefabMap[(char) AnimalSymbols.Charlie] = Charlie;
+			prefabMap[(char) AnimalSymbols.Sheila] = Sheila;
+			prefabMap[(char) AnimalSymbols.Spring] = Spring;
+			prefabMap[(char) AnimalSymbols.Summer] = Summer;
 
-			prefabMap[Char.ToUpper((char) Animal.Charlie)] = CharlieHome;
-			prefabMap[Char.ToUpper((char) Animal.Sheila)] = SheilaHome;
-			prefabMap[Char.ToUpper((char) Animal.Spring)] = SpringHome;
-			prefabMap[Char.ToUpper((char) Animal.Summer)] = SummerHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Charlie)] = CharlieHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Sheila)] = SheilaHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Spring)] = SpringHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Summer)] = SummerHome;
 		}
 	}
 }

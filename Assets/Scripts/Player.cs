@@ -32,6 +32,27 @@ namespace Relay
 			}
 		}
 
+		public bool TryPlaceIntoHome (Home home)
+		{
+			if (heldAnimal != null && heldAnimal.Name == home.HomeFor)
+			{
+				heldAnimal.transform.gameObject.SetActive (false);
+				home.gameObject.SetActive (false);
+				heldAnimal.transform.SetParent (home.gameObject.transform);
+
+				heldAnimal.transform.position = home.transform.position;
+				heldAnimal = null;
+				updateUI ();
+				return true;
+			}
+			return false;
+		}
+
+		public Animal GetAnimal()
+		{
+			return heldAnimal;
+		}
+
 		public bool IsEmpty()
 		{
 			return this.heldAnimal == null;
@@ -172,7 +193,23 @@ namespace Relay
 			if (animal != null)
 			{
 				// this is an animal; pick it up if we can
-				TryPickUp(animal);
+				bool pickedUp = TryPickUp(animal);
+				if (pickedUp)
+				{
+					// pickup successful - go to next turn
+					GameManager.instance.EndTurn();
+				}
+			}
+			Home home = component.GetComponent<Home> ();
+			if (home != null)
+			{
+				// this is a home; drop an animal into it if we can
+				bool animalPlaced = TryPutAnimalHome(home);
+				if (animalPlaced)
+				{
+					// animal successfully placed - go to next turn
+					GameManager.instance.EndTurn ();
+				}
 			}
 		}
 
@@ -214,6 +251,16 @@ namespace Relay
 			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
 			//and not load all the scene object in the current scene.
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+		}
+
+		public bool TryPutAnimalHome (Home home)
+		{
+			bool placed = leftHand.TryPlaceIntoHome (home);
+			if (placed)
+			{
+				return true;
+			}
+			else return rightHand.TryPlaceIntoHome (home);
 		}
 
 		public bool TryPickUp (Animal a)
