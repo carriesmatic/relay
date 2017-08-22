@@ -52,7 +52,7 @@ namespace Relay
 			boxCollider.enabled = false;
 			
 			//Cast a line from start point to end point checking collision on blockingLayer.
-			hit = Physics2D.Linecast (start, end, blockingLayer);
+			hit = Physics2D.Linecast (end, end, blockingLayer);
 			
 			//Re-enable boxCollider after linecast
 			boxCollider.enabled = true;
