@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;	//Allows us to use UI.
+using UnityEngine.UI;
+
+	//Allows us to use UI.
 using UnityEngine.SceneManagement;
 
 namespace Relay
@@ -12,18 +14,18 @@ namespace Relay
 		private Animal heldAnimal = null;
 		readonly GameObject handUIRoot = null;
 
-		public Hand (GameObject handUIRoot)
+		public Hand(GameObject handUIRoot)
 		{
 			this.handUIRoot = handUIRoot;
 		}
 
-		public bool TryHold (Animal a)
+		public bool TryHold(Animal a)
 		{
 			if (heldAnimal == null)
 			{
 				heldAnimal = a;
-				a.transform.gameObject.SetActive (false);
-				updateUI ();
+				a.transform.gameObject.SetActive(false);
+				updateUI();
 				return true;
 			}
 			else
@@ -32,30 +34,30 @@ namespace Relay
 			}
 		}
 
-		public bool TryPlaceIntoHome (Home home)
+		public bool TryPlaceIntoHome(Home home)
 		{
 			if (heldAnimal != null && heldAnimal.Name == home.HomeFor)
 			{
-				heldAnimal.transform.gameObject.SetActive (false);
-				home.gameObject.SetActive (false);
-				heldAnimal.transform.SetParent (home.gameObject.transform);
+				heldAnimal.transform.gameObject.SetActive(false);
+				home.gameObject.SetActive(false);
+				heldAnimal.transform.SetParent(home.gameObject.transform);
 
 				heldAnimal.transform.position = home.transform.position;
 				heldAnimal = null;
-				updateUI ();
+				updateUI();
 				return true;
 			}
 			return false;
 		}
 
-		public bool TryDrop (int x, int y) 
+		public bool TryDrop(int x, int y)
 		{
 			if (heldAnimal != null)
 			{
-				heldAnimal.transform.gameObject.SetActive (true);
-				heldAnimal.transform.position = new Vector2 (x, y);
+				heldAnimal.transform.gameObject.SetActive(true);
+				heldAnimal.transform.position = new Vector2(x, y);
 				heldAnimal = null;
-				updateUI ();
+				updateUI();
 				return true;
 			}
 			return false;
@@ -71,19 +73,19 @@ namespace Relay
 		// heldAnimal null => HeldAnimalImage is inactive
 		private void updateUI()
 		{
-			GameObject heldAnimalImage = handUIRoot.transform.Find ("HeldAnimalImage").gameObject;
+			GameObject heldAnimalImage = handUIRoot.transform.Find("HeldAnimalImage").gameObject;
 			if (heldAnimal != null && !heldAnimalImage.activeSelf)
 			{
 				// activate heldAnimalImage
-				heldAnimalImage.SetActive (true);
+				heldAnimalImage.SetActive(true);
 				Image image = heldAnimalImage.GetComponent<Image>();
-				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer> ();
+				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer>();
 				image.sprite = animalSpriteRenderer.sprite;
 			}
 			else if (heldAnimal == null && heldAnimalImage.activeSelf)
 			{
 				// deactivate heldAnimalImage
-				heldAnimalImage.SetActive (false);
+				heldAnimalImage.SetActive(false);
 			}
 		}
 	}
@@ -93,33 +95,39 @@ namespace Relay
 		private Hand leftHand;
 		private Hand rightHand;
 
-		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
-		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
-		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
-		public AudioClip gameOverSound;				//Audio clip to play when player dies.
+		public float restartLevelDelay = 1f;
+		//Delay time in seconds to restart level.
+		public AudioClip moveSound1;
+		//1 of 2 Audio clips to play when player moves.
+		public AudioClip moveSound2;
+		//2 of 2 Audio clips to play when player moves.
+		public AudioClip gameOverSound;
+		//Audio clip to play when player dies.
 
-		private Animator animator;					//Used to store a reference to the Player's animator component.
+		private Animator animator;
+		//Used to store a reference to the Player's animator component.
 
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
 		private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 		#endif
 
 		//Start overrides the Start function of MovingObject
-		protected override void Start ()
+		protected override void Start()
 		{
-			leftHand = new Hand (GameObject.Find ("LeftHand"));
-			rightHand = new Hand (GameObject.Find ("RightHand"));
+			leftHand = new Hand(GameObject.Find("LeftHand"));
+			rightHand = new Hand(GameObject.Find("RightHand"));
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 
 			//Call the Start function of the MovingObject base class.
-			base.Start ();
+			base.Start();
 		}
 
 		private void Update()
 		{
 			//If it's not the player's turn, exit the function.
-			if (this.isCurrentlyMoving()) return;
+			if (this.isCurrentlyMoving())
+				return;
 			if (GameManager.instance.enabled == false && GameManager.instance.boardManager.IsGameWon())
 			{
 				if (Input.anyKeyDown)
@@ -135,10 +143,10 @@ namespace Relay
 			#if UNITY_STANDALONE || UNITY_WEBPLAYER
 
 			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
+			horizontal = (int)(Input.GetAxisRaw("Horizontal"));
 
 			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
-			vertical = (int) (Input.GetAxisRaw ("Vertical"));
+			vertical = (int)(Input.GetAxisRaw("Vertical"));
 
 			//Check if moving horizontally, if so set vertical to zero.
 			if (horizontal != 0)
@@ -196,11 +204,11 @@ namespace Relay
 			{
 				if (Input.GetButtonDown("LeftHand"))
 				{
-					leftHand.TryDrop((int) transform.position.x, (int) transform.position.y);
+					leftHand.TryDrop((int)transform.position.x, (int)transform.position.y);
 				}
 				else if (Input.GetButtonDown("RightHand"))
 				{
-					rightHand.TryDrop((int) transform.position.x, (int) transform.position.y);
+					rightHand.TryDrop((int)transform.position.x, (int)transform.position.y);
 				}
 			}
 		}
@@ -210,12 +218,12 @@ namespace Relay
 			GameManager.instance.EndTurn();
 
 			//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
-			SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
+			SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
 		}
-			
-		protected override void OnMoveBlocked (Transform component)
+
+		protected override void OnMoveBlocked(Transform component)
 		{
-			Animal animal = component.GetComponent<Animal> ();
+			Animal animal = component.GetComponent<Animal>();
 			if (animal != null)
 			{
 				// this is an animal; pick it up if we can
@@ -226,7 +234,7 @@ namespace Relay
 					GameManager.instance.EndTurn();
 				}
 			}
-			Home home = component.GetComponent<Home> ();
+			Home home = component.GetComponent<Home>();
 			if (home != null)
 			{
 				// this is a home; drop an animal into it if we can
@@ -234,7 +242,7 @@ namespace Relay
 				if (animalPlaced)
 				{
 					// animal successfully placed - go to next turn
-					GameManager.instance.EndTurn ();
+					GameManager.instance.EndTurn();
 				}
 			}
 		}
@@ -259,52 +267,53 @@ namespace Relay
 		}
 
 		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
-		private void OnTriggerEnter2D (Collider2D other)
+		private void OnTriggerEnter2D(Collider2D other)
 		{
 			//Check if the tag of the trigger collided with is Exit.
-			if(other.tag == "Exit")
+			if (other.tag == "Exit")
 			{
 				//Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
-				Invoke ("Restart", restartLevelDelay);
+				Invoke("Restart", restartLevelDelay);
 
 				//Disable the player object since level is over.
 				enabled = false;
 			}
 		}
 
-		private void Restart ()
+		private void Restart()
 		{
 			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
 			//and not load all the scene object in the current scene.
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
-		public bool TryPutAnimalHome (Home home)
+		public bool TryPutAnimalHome(Home home)
 		{
-			bool placed = leftHand.TryPlaceIntoHome (home);
+			bool placed = leftHand.TryPlaceIntoHome(home);
 			if (placed)
 			{
 				return true;
 			}
-			else return rightHand.TryPlaceIntoHome (home);
+			else
+				return rightHand.TryPlaceIntoHome(home);
 		}
 
-		public bool TryPickUp (Animal a)
+		public bool TryPickUp(Animal a)
 		{
-			float distanceToAnimal = Mathf.Abs (this.transform.position.x - a.transform.position.x) + Mathf.Abs (this.transform.position.y - a.transform.position.y);
+			float distanceToAnimal = Mathf.Abs(this.transform.position.x - a.transform.position.x) + Mathf.Abs(this.transform.position.y - a.transform.position.y);
 			if (distanceToAnimal > 1)
 			{
 				// animal is too far away to grab
 				return false;
 			}
 
-			if (leftHand.IsEmpty ())
+			if (leftHand.IsEmpty())
 			{
-				return leftHand.TryHold (a);
+				return leftHand.TryHold(a);
 			}
-			else if (rightHand.IsEmpty ())
+			else if (rightHand.IsEmpty())
 			{
-				return rightHand.TryHold (a);
+				return rightHand.TryHold(a);
 			}
 
 			// hands are full
