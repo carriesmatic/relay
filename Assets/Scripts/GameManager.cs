@@ -16,7 +16,7 @@ namespace Relay
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
-		private int level = 1;									//Current level number, expressed in game as "Day 1".
+		private int level = 0;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
 
 		public const int phaseDuration = 8;
@@ -43,9 +43,6 @@ namespace Relay
 
 			//Get a component reference to the attached BoardManager script
 			boardScript = GetComponent<BoardManager>();
-
-			//Call the InitGame function to initialize the first level 
-			InitGame();
 		}
 
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
@@ -60,6 +57,7 @@ namespace Relay
 		//This is called each time a scene is loaded.
 		static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 		{
+			Debug.Log("Scene was loaded.");
 			instance.level++;
 			instance.InitGame();
 		}
