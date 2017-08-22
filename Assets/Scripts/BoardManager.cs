@@ -26,7 +26,8 @@ namespace Relay
 			public const char Floor = '.';
 			public const char OuterWall = '*';
 			public const char Wall = '-';
-			public const char Chasm = '~';
+			public const char Chasm = '#';
+			public const char Ocean = '~';
 			public const char Player = '@';
 		}
 
