@@ -23,6 +23,14 @@ namespace Relay
 		public bool IsDay { get { return (turn % (phaseDuration * 2)) < phaseDuration; } }
 		public bool IsNight { get { return (turn % (phaseDuration * 2)) >= phaseDuration; } }
 
+		public BoardManager boardManager
+		{
+			get
+			{
+				return boardScript;
+			}
+		}
+
 		//Awake is always called before any Start functions
 		void Awake()
 		{
@@ -85,14 +93,10 @@ namespace Relay
 			levelImage.SetActive(false);
 		}
 
-		public BoardManager getBoardManager() {
-			return this.boardScript;
-		}
-
 		//call this to test if the game is over
 		public bool TestGameWon()
 		{
-			if (boardScript.IsGameWon ())
+			if (boardScript.IsGameWon())
 			{
 				//Set levelText to display number of levels passed and game over message
 				levelText.text = "You beat Level " + level + " in " + turn + " turns!";
@@ -112,10 +116,11 @@ namespace Relay
 
 		public void EndTurn()
 		{
-			if (TestGameWon ())
+			if (TestGameWon())
 			{
 				return;
 			}
+
 			string dayText = "Day n_n";
 			string nightText = "Night u_u";
 
@@ -132,6 +137,12 @@ namespace Relay
 				phaseText.text = nightText + turnText;
 			}
 		}	
+
+		public void AdvanceLevel()
+		{
+			turn = 0;
+			SceneManager.LoadScene("Main");
+		}
 	}
 }
 

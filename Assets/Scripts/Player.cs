@@ -116,10 +116,17 @@ namespace Relay
 			base.Start ();
 		}
 
-		private void Update ()
+		private void Update()
 		{
 			//If it's not the player's turn, exit the function.
 			if (this.isCurrentlyMoving()) return;
+			if (GameManager.instance.enabled == false && GameManager.instance.boardManager.IsGameWon())
+			{
+				if (Input.anyKeyDown)
+				{
+					GameManager.instance.AdvanceLevel();
+				}
+			}
 
 			int horizontal = 0;  	//Used to store the horizontal move direction.
 			int vertical = 0;		//Used to store the vertical move direction.
@@ -134,7 +141,7 @@ namespace Relay
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
 
 			//Check if moving horizontally, if so set vertical to zero.
-			if(horizontal != 0)
+			if (horizontal != 0)
 			{
 				vertical = 0;
 			}
@@ -183,17 +190,17 @@ namespace Relay
 			//Check if we have a non-zero value for horizontal or vertical
 			if (horizontal != 0 || vertical != 0)
 			{
-				AttemptMove (horizontal, vertical);
+				AttemptMove(horizontal, vertical);
 			}
 			else
 			{
-				if (Input.GetButtonDown ("LeftHand"))
+				if (Input.GetButtonDown("LeftHand"))
 				{
-					leftHand.TryDrop ((int) transform.position.x, (int) transform.position.y);
+					leftHand.TryDrop((int) transform.position.x, (int) transform.position.y);
 				}
-				else if (Input.GetButtonDown ("RightHand"))
+				else if (Input.GetButtonDown("RightHand"))
 				{
-					rightHand.TryDrop ((int) transform.position.x, (int) transform.position.y);
+					rightHand.TryDrop((int) transform.position.x, (int) transform.position.y);
 				}
 			}
 		}
