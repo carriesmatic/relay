@@ -66,6 +66,12 @@ namespace Relay
 				// Skip current level.
 				AdvanceLevel();
 			}
+			else if (Input.GetKeyDown(KeyCode.B))
+			{
+				// Go back one level.
+				level = level - 2;
+				AdvanceLevel();
+			}
 		}
 
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
