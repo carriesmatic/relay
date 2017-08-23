@@ -28,7 +28,9 @@ namespace Relay
 			public const char Floor = '.';
 			public const char OuterWall = '*';
 			public const char Wall = '-';
-			public const char Chasm = '#';
+			public const char ChasmVertical = '|';
+			public const char ChasmHorizontal = '=';
+			public const char ChasmStandalone = '#';
 			public const char Ocean = '~';
 			public const char Player = '@';
 		}
@@ -52,7 +54,9 @@ namespace Relay
 		public GameObject FloorTile;
 		public GameObject OuterWallTile;
 		public GameObject WallTile;
-		public GameObject ChasmTile;
+		public GameObject ChasmVerticalTile;
+		public GameObject ChasmHorizontalTile;
+		public GameObject ChasmStandaloneTile;
 		public GameObject Player;
 		public GameObject Chorlie;
 		public GameObject Charlie;
@@ -244,7 +248,9 @@ namespace Relay
 			prefabMap[Symbols.Ocean] = OceanTile;
 			prefabMap[Symbols.OuterWall] = OuterWallTile;
 			prefabMap[Symbols.Wall] = WallTile;
-			prefabMap[Symbols.Chasm] = ChasmTile;
+			prefabMap[Symbols.ChasmVertical] = ChasmVerticalTile;
+			prefabMap[Symbols.ChasmHorizontal] = ChasmHorizontalTile;
+			prefabMap[Symbols.ChasmStandalone] = ChasmStandaloneTile;
 			prefabMap[Symbols.Player] = Player;
 
 			prefabMap[(char) AnimalSymbols.Charlie] = Charlie;
