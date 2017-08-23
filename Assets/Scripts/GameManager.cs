@@ -53,6 +53,21 @@ namespace Relay
 			boardScript = GetComponent<BoardManager>();
 		}
 
+		void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				// Reload current level.
+				level--;
+				AdvanceLevel();
+			}
+			else if (Input.GetKeyDown(KeyCode.S))
+			{
+				// Skip current level.
+				AdvanceLevel();
+			}
+		}
+
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
 		//(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
