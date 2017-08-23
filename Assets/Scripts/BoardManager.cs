@@ -20,6 +20,7 @@ namespace Relay
 			Spring = 'c',
 			Summer = 'd',
 			Chorlie = 'e',
+			Chirlie = 'f',
 		}
 
 		public static class Symbols
@@ -55,11 +56,13 @@ namespace Relay
 		public GameObject Player;
 		public GameObject Chorlie;
 		public GameObject Charlie;
+		public GameObject Chirlie;
 		public GameObject Sheila;
 		public GameObject Spring;
 		public GameObject Summer;
 		public GameObject ChorlieHome;
 		public GameObject CharlieHome;
+		public GameObject ChirlieHome;
 		public GameObject SheilaHome;
 		public GameObject SpringHome;
 		public GameObject SummerHome;
@@ -135,7 +138,15 @@ namespace Relay
 					var x = Int32.Parse(match.Groups[2].Value);
 					var y = Int32.Parse(match.Groups[3].Value);
 
-					LayoutObject(tile, x, y);
+					if (tile == '@')
+					{
+						GameObject player = GameObject.FindWithTag ("Player");
+						player.transform.position = new Vector2 (x, y);
+					}
+					else
+					{
+						LayoutObject (tile, x, y);
+					}
 				}
 			}
 		}
@@ -241,9 +252,11 @@ namespace Relay
 			prefabMap[(char) AnimalSymbols.Spring] = Spring;
 			prefabMap[(char) AnimalSymbols.Summer] = Summer;
 			prefabMap[(char)AnimalSymbols.Chorlie] = Chorlie;
+			prefabMap[(char)AnimalSymbols.Chirlie] = Chirlie;
 
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Charlie)] = CharlieHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Chorlie)] = ChorlieHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Chirlie)] = ChirlieHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Sheila)] = SheilaHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Spring)] = SpringHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Summer)] = SummerHome;
