@@ -236,6 +236,7 @@ namespace Relay
 		protected override void OnMoveBlocked(Transform component)
 		{
 			Animal animal = component.GetComponent<Animal>();
+
 			if (animal != null)
 			{
 				// this is an animal; pick it up if we can
@@ -247,7 +248,9 @@ namespace Relay
 					return;
 				}
 			}
+
 			Home home = component.GetComponent<Home>();
+
 			if (home != null)
 			{
 				// this is a home; drop an animal into it if we can
@@ -260,17 +263,21 @@ namespace Relay
 				}
 			}
 
-			// if you can't pickup or dropoff, try jumping over it if you have the rabbit
-			float distanceToObstruction =
-				Mathf.Abs (component.transform.position.x - transform.position.x) + Mathf.Abs (component.transform.position.y - transform.position.y);
-			if (IsHolding<Rabbit> () && distanceToObstruction < 2)
+			if (component.tag == "Jumpable" || component.tag == "Home" || component.tag == "Animal")
 			{
-				// use rabbit to jump!
-				int offsetX = (int)(component.transform.position.x - transform.position.x);
-				int offsetY = (int)(component.transform.position.y - transform.position.y);
-				AttemptMove (offsetX * 2, offsetY * 2);
-				return;
+				// if you can't pickup or dropoff, try jumping over it if you have the rabbit
+				float distanceToObstruction =
+					Mathf.Abs (component.transform.position.x - transform.position.x) + Mathf.Abs (component.transform.position.y - transform.position.y);
+				if (IsHolding<Rabbit> () && distanceToObstruction < 2)
+				{
+					// use rabbit to jump!
+					int offsetX = (int)(component.transform.position.x - transform.position.x);
+					int offsetY = (int)(component.transform.position.y - transform.position.y);
+					AttemptMove(offsetX * 2, offsetY * 2);
+					return;
+				}
 			}
+
 		}
 
 		protected override void AnimateDirection(Direction d)
