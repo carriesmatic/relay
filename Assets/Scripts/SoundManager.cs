@@ -41,6 +41,7 @@ namespace Relay
 		{
 			muted = !muted;
 			musicSource.mute = muted;
+			efxSource.mute = muted;
 		}
 		
 		//Used to play single sound clips.
