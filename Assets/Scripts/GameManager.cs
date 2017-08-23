@@ -172,7 +172,7 @@ namespace Relay
 			}
 
 			// Make animals transparent if they are not active.
-			boardScript.UpdateAnimalActivity();
+			boardScript.UpdateAnimalActiveUI();
 		}	
 
 		public void AdvanceLevel()

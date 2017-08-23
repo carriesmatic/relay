@@ -14,6 +14,15 @@ namespace Relay
 		private Animal heldAnimal = null;
 		readonly GameObject handUIRoot = null;
 
+		private GameObject heldAnimalImage
+		{
+			get
+			{
+				return handUIRoot.transform.Find ("HeldAnimalImage").gameObject;
+			}
+		}
+
+
 		public Hand(GameObject handUIRoot)
 		{
 			this.handUIRoot = handUIRoot;
@@ -88,7 +97,6 @@ namespace Relay
 		// heldAnimal null => HeldAnimalImage is inactive
 		private void UpdateUI()
 		{
-			GameObject heldAnimalImage = handUIRoot.transform.Find("HeldAnimalImage").gameObject;
 			if (heldAnimal != null && !heldAnimalImage.activeSelf)
 			{
 				// activate heldAnimalImage
@@ -105,6 +113,14 @@ namespace Relay
 				heldAnimalImage.SetActive(false);
 			}
 		}
+
+		public void UpdateAnimalActiveUI()
+		{
+			if (heldAnimal != null)
+			{
+				BoardManager.FlipYScaleIfNeeded(heldAnimalImage.transform, heldAnimal.IsCurrentlyActive());
+			}
+		}
 	}
 	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 	public class Player : MovingObject
@@ -117,6 +133,8 @@ namespace Relay
 		//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;
 		//2 of 2 Audio clips to play when player moves.
+
+		public AudioClip hitWallSound;
 
 		private Animator animator;
 		//Used to store a reference to the Player's animator component.
@@ -139,6 +157,8 @@ namespace Relay
 
 		private void Update()
 		{
+			leftHand.UpdateAnimalActiveUI ();
+			rightHand.UpdateAnimalActiveUI ();
 			//If it's not the player's turn, exit the function.
 			if (this.isCurrentlyMoving())
 			{
@@ -300,6 +320,9 @@ namespace Relay
 					return;
 				}
 			}
+
+			// if none of the above, you just hit an obstruction and couldn't move.
+			SoundManager.instance.RandomizeSfx(hitWallSound);
 
 		}
 

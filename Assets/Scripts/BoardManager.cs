@@ -82,18 +82,23 @@ namespace Relay
 			return currentBoardAnimals.TrueForAll(animal => animal.IsInHome());
 		}
 
-		public void UpdateAnimalActivity()
+		public void UpdateAnimalActiveUI()
 		{
 			foreach (var animal in currentBoardAnimals)
 			{
-				bool shouldUpdate = animal.IsCurrentlyActive() && animal.transform.localScale.y < 0;
-				shouldUpdate = shouldUpdate || (!animal.IsCurrentlyActive() && animal.transform.localScale.y > 0);
-				if (shouldUpdate)
-				{
-					var scale = animal.transform.localScale;
-					scale.y *= -1;
-					animal.transform.localScale = scale;
-				}
+				BoardManager.FlipYScaleIfNeeded (animal.transform, animal.IsCurrentlyActive());
+			}
+		}
+
+		public static void FlipYScaleIfNeeded(Transform transform, bool isCurrentlyActive)
+		{
+			bool shouldUpdate = isCurrentlyActive && transform.localScale.y < 0;
+			shouldUpdate = shouldUpdate || (!isCurrentlyActive && transform.localScale.y > 0);
+			if (shouldUpdate)
+			{
+				var scale = transform.localScale;
+				scale.y *= -1;
+				transform.localScale = scale;
 			}
 		}
 
