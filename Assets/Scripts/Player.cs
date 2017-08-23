@@ -36,7 +36,17 @@ namespace Relay
 
 		public bool IsHolding<T>() where T : Animal
 		{
-			return heldAnimal != null && heldAnimal.gameObject.GetComponent<T> () != null;
+			if (heldAnimal != null)
+			{
+				var animal = heldAnimal.gameObject.GetComponent<T>();
+
+				if (animal != null)
+				{
+					return animal.IsCurrentlyActive();
+				}
+			}
+
+			return false;
 		}
 
 		public bool TryPlaceIntoHome(Home home)

@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Spring
+  isNocturnal: 1
 --- !u!212 &212883244052493972
 SpriteRenderer:
   m_ObjectHideFlags: 1
