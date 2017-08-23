@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace Relay
 {
@@ -10,9 +11,10 @@ namespace Relay
 		public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
 		public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
 		public float highPitchRange = 1.05f;			//The highest a sound effect will be randomly pitched.
-		
-		
-		void Awake ()
+
+		private bool muted = false;
+
+		void Awake()
 		{
 			//Check if there is already an instance of SoundManager
 			if (instance == null)
@@ -26,7 +28,20 @@ namespace Relay
 			//Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
 			DontDestroyOnLoad (gameObject);
 		}
-		
+
+		public void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.M))
+			{
+				ToggleSound();
+			}
+		}
+
+		public void ToggleSound()
+		{
+			muted = !muted;
+			musicSource.mute = muted;
+		}
 		
 		//Used to play single sound clips.
 		public void PlaySingle(AudioClip clip)
@@ -40,7 +55,7 @@ namespace Relay
 		
 		
 		//RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
-		public void RandomizeSfx (params AudioClip[] clips)
+		public void RandomizeSfx(params AudioClip[] clips)
 		{
 			//Generate a random number between 0 and the length of our array of clips passed in.
 			int randomIndex = Random.Range(0, clips.Length);
