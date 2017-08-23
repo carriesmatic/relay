@@ -104,6 +104,8 @@ namespace Relay
 		//Initializes the game for each level.
 		void InitGame()
 		{
+			enabled = true;
+
 			levelImage = GameObject.Find("LevelImage");
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 			levelText.text = "Level " + level;
