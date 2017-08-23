@@ -65,16 +65,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff182172d726402b9e9eacdb89c9724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OceanTile: {fileID: 1066451721169980, guid: fbc4fed7271064897b58b4cf66cbac6c, type: 2}
   FloorTile: {fileID: 1676159027866326, guid: 9cd8562ee3a5949d7998c9c10ae86960, type: 2}
   OuterWallTile: {fileID: 1092240567088410, guid: 09abfd1da5e464a55bf871c5165d98c7,
     type: 2}
   WallTile: {fileID: 1382088065007244, guid: c0199b3e99f0042a78cae5a214e74c0f, type: 2}
   ChasmTile: {fileID: 1092240567088410, guid: 09abfd1da5e464a55bf871c5165d98c7, type: 2}
   Player: {fileID: 146652, guid: 28b53fc28d3a140c392f0e2d919f9de1, type: 2}
+  Chorlie: {fileID: 1068333092115678, guid: 3ea320c6bf147e146b4b48f14382819d, type: 2}
   Charlie: {fileID: 1407655272949996, guid: f99310492c51246cd89cde4491860853, type: 2}
   Sheila: {fileID: 1208519491544130, guid: cf73f5141dda14481b20a22c13451e43, type: 2}
   Spring: {fileID: 1564241391048084, guid: c060fe8549f0f4d579ff59a63c5108ea, type: 2}
   Summer: {fileID: 1751804222277596, guid: d915ec6da3bb741a6b4a079c4bd9c9c3, type: 2}
+  ChorlieHome: {fileID: 1648506271981764, guid: 51e0fe7a5337f4e409c1428d36d0ab7e,
+    type: 2}
   CharlieHome: {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188,
     type: 2}
   SheilaHome: {fileID: 1379299263085284, guid: 8608d1add81e01c42b0e859e9ecf8b65, type: 2}
@@ -82,4 +86,3 @@ MonoBehaviour:
   SummerHome: {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188, type: 2}
   boardHolder: {fileID: 0}
   currentBoardAnimals: []
-  currentBoardHomes: []

@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 513e9ba43aae748a3b955500bc00f344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Summer
 --- !u!212 &212104050550346730
 SpriteRenderer:
   m_ObjectHideFlags: 1
