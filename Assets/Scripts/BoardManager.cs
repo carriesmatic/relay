@@ -82,6 +82,21 @@ namespace Relay
 			return currentBoardAnimals.TrueForAll(animal => animal.IsInHome());
 		}
 
+		public void UpdateAnimalActivity()
+		{
+			foreach (var animal in currentBoardAnimals)
+			{
+				bool shouldUpdate = animal.IsCurrentlyActive() && animal.transform.localScale.y < 0;
+				shouldUpdate = shouldUpdate || (!animal.IsCurrentlyActive() && animal.transform.localScale.y > 0);
+				if (shouldUpdate)
+				{
+					var scale = animal.transform.localScale;
+					scale.y *= -1;
+					animal.transform.localScale = scale;
+				}
+			}
+		}
+
 		//Sets up the outer walls and floor (background) of the game board.
 		void SetupBoardTiles(string tiles)
 		{

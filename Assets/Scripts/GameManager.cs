@@ -168,6 +168,9 @@ namespace Relay
 			{
 				phaseText.text = nightText + turnText;
 			}
+
+			// Make animals transparent if they are not active.
+			boardScript.UpdateAnimalActivity();
 		}	
 
 		public void AdvanceLevel()
