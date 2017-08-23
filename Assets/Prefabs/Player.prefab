@@ -111,11 +111,8 @@ MonoBehaviour:
     m_Bits: 256
   moveTime: 0.1
   moveDirection: 1
-  bearSprite: {fileID: 0}
-  restartLevelDelay: 1
-  moveSound1: {fileID: 8300000, guid: 892962212a4b74d1c9f578a3b6ea6439, type: 3}
-  moveSound2: {fileID: 8300000, guid: a826bc3d758db43d6ae9caf415b63d1d, type: 3}
-  gameOverSound: {fileID: 8300000, guid: e2beefeb2273f4efe992adf5b8d67c29, type: 3}
+  moveSound1: {fileID: 8300000, guid: 12b6253301e9b4b44b67369c57dc4283, type: 3}
+  moveSound2: {fileID: 8300000, guid: 12b6253301e9b4b44b67369c57dc4283, type: 3}
 --- !u!212 &21246652
 SpriteRenderer:
   m_ObjectHideFlags: 1
