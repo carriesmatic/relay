@@ -141,7 +141,7 @@ namespace Relay
 		public void AdvanceLevel()
 		{
 			turn = 0;
-			SceneManager.LoadScene("Main");
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 	}
 }

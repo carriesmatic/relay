@@ -102,8 +102,6 @@ namespace Relay
 		private Hand leftHand;
 		private Hand rightHand;
 
-		public float restartLevelDelay = 1f;
-		//Delay time in seconds to restart level.
 		public AudioClip moveSound1;
 		//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;
@@ -293,22 +291,10 @@ namespace Relay
 		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
 		private void OnTriggerEnter2D(Collider2D other)
 		{
-			//Check if the tag of the trigger collided with is Exit.
-			if (other.tag == "Exit")
+			// We can use this by setting collision triggers.
+			if (other.tag == "")
 			{
-				//Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
-				Invoke("Restart", restartLevelDelay);
-
-				//Disable the player object since level is over.
-				enabled = false;
 			}
-		}
-
-		private void Restart()
-		{
-			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
-			//and not load all the scene object in the current scene.
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
 		public bool TryPutAnimalHome(Home home)
