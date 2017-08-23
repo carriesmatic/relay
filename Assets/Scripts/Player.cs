@@ -101,6 +101,7 @@ namespace Relay
 	{
 		private Hand leftHand;
 		private Hand rightHand;
+		private LayerMask swimmingLayer;
 
 		public AudioClip moveSound1;
 		//1 of 2 Audio clips to play when player moves.
@@ -233,6 +234,18 @@ namespace Relay
 			return leftHand.IsHolding<T> () || rightHand.IsHolding<T> ();
 		}
 
+		protected override Transform CheckCollision(Vector2 start, Vector2 end)
+		{
+			var hitTransform =  base.CheckCollision(start, end);
+
+			if (hitTransform != null && hitTransform.tag == "Swimmable" && IsHolding<Dolphin>())
+			{
+				return null;
+			}
+
+			return hitTransform;
+		}
+
 		protected override void OnMoveBlocked(Transform component)
 		{
 			Animal animal = component.GetComponent<Animal>();
@@ -303,8 +316,9 @@ namespace Relay
 		private void OnTriggerEnter2D(Collider2D other)
 		{
 			// We can use this by setting collision triggers.
-			if (other.tag == "")
+			if (other.tag == "Swimmable")
 			{
+				Debug.Log("Swimming");
 			}
 		}
 

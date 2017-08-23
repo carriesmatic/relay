@@ -14,13 +14,18 @@ namespace Relay
 			Right
 		}
 
-		public LayerMask blockingLayer;
 		//Layer on which collision will be checked.
-		private bool isMoving = false;
+		public LayerMask blockingLayer;
+
+		// Contact filter to filter movement collisions.
+		private ContactFilter2D contactFilter;
+
 		//Is this object currently moving?
-		public float moveTime = 0.1f;
+		private bool isMoving = false;
+
 		//Time it will take object to move, in seconds.
-		
+		public float moveTime = 0.1f;
+
 		private BoxCollider2D boxCollider;
 		//The BoxCollider2D component attached to this object.
 		private Rigidbody2D rb2D;
@@ -48,27 +53,34 @@ namespace Relay
 			return isMoving;
 		}
 
-		//Move returns true if it is able to move and false if not.
-		//hit != null <=> Move returns false
-		private bool Move(int xDir, int yDir, out RaycastHit2D hit)
+		protected virtual Transform CheckCollision(Vector2 start, Vector2 end)
 		{
-			//Store start position to move from, based on objects current transform position.
-			Vector2 start = transform.position;
-			
-			// Calculate end position based on the direction parameters passed in when calling Move.
-			Vector2 end = start + new Vector2(xDir, yDir);
-			
 			//Disable the boxCollider so that linecast doesn't hit this object's own collider.
 			boxCollider.enabled = false;
 			
-			//Cast a line from start point to end point checking collision on blockingLayer.
-			hit = Physics2D.Linecast(end, end, blockingLayer);
-			
+			//Cast a line from start point to end point checking collisions configured by the blocking layer.
+			var hit = Physics2D.Linecast(end, end, blockingLayer);
+
 			//Re-enable boxCollider after linecast
 			boxCollider.enabled = true;
+
+			return hit.transform;
+		}
+
+		//Move returns true if it is able to move and false if not.
+		//hit != null <=> Move returns false
+		private bool Move(int xDir, int yDir, out Transform hitTransform)
+		{
+			//Store start position to move from, based on objects current transform position.
+			Vector2 start = transform.position;
+
+			// Calculate end position based on the direction parameters passed in when calling Move.
+			Vector2 end = start + new Vector2(xDir, yDir);
+
+			hitTransform = CheckCollision(start, end);
 			
 			//Check if anything was hit
-			if (hit.transform == null)
+			if (hitTransform == null)
 			{
 				//If nothing was hit, start SmoothMovement co-routine passing in the Vector2 end as destination
 				StartCoroutine(SmoothMovement(end));
@@ -111,7 +123,7 @@ namespace Relay
 
 		public void AttemptMove(int xDir, int yDir)
 		{
-			RaycastHit2D hit;
+			Transform hitTransform;
 			Direction newMoveDirection = moveDirection;
 
 			if (xDir > 0)
@@ -138,7 +150,7 @@ namespace Relay
 			}
 
 			//Set canMove to true if Move was successful, false if failed.
-			bool canMove = Move(xDir, yDir, out hit);
+			bool canMove = Move(xDir, yDir, out hitTransform);
 
 			if (canMove)
 			{
@@ -146,7 +158,7 @@ namespace Relay
 			}
 			else
 			{
-				OnMoveBlocked(hit.transform);
+				OnMoveBlocked(hitTransform);
 			}
 		}
 
