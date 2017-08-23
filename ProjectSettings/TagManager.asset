@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Animal
   - Home
+  - Jumpable
+  - Swimmable
   layers:
   - Default
   - TransparentFX

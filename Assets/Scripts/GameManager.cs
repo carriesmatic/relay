@@ -53,6 +53,36 @@ namespace Relay
 			boardScript = GetComponent<BoardManager>();
 		}
 
+		void Update()
+		{
+			if (Input.GetButtonDown("Reload"))
+			{
+				// Reload current level.
+				level--;
+				AdvanceLevel();
+			}
+			else if (Input.GetButtonDown("Skip"))
+			{
+				// Skip current level.
+				AdvanceLevel();
+			}
+			else if (Input.GetButtonDown("Back"))
+			{
+				if (level == 1)
+				{
+					return;
+				}
+
+				// Go back one level.
+				level = level - 2;
+				AdvanceLevel();
+			}
+			else if (Input.GetButtonDown("EndTurn"))
+			{
+				EndTurn();
+			}
+		}
+
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
 		//(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -138,6 +168,9 @@ namespace Relay
 			{
 				phaseText.text = nightText + turnText;
 			}
+
+			// Make animals transparent if they are not active.
+			boardScript.UpdateAnimalActivity();
 		}	
 
 		public void AdvanceLevel()

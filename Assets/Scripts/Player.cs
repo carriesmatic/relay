@@ -36,7 +36,17 @@ namespace Relay
 
 		public bool IsHolding<T>() where T : Animal
 		{
-			return heldAnimal != null && heldAnimal.gameObject.GetComponent<T> () != null;
+			if (heldAnimal != null)
+			{
+				var animal = heldAnimal.gameObject.GetComponent<T>();
+
+				if (animal != null)
+				{
+					return animal.IsCurrentlyActive();
+				}
+			}
+
+			return false;
 		}
 
 		public bool TryPlaceIntoHome(Home home)
@@ -101,6 +111,7 @@ namespace Relay
 	{
 		private Hand leftHand;
 		private Hand rightHand;
+		private LayerMask swimmingLayer;
 
 		public AudioClip moveSound1;
 		//1 of 2 Audio clips to play when player moves.
@@ -142,6 +153,7 @@ namespace Relay
 				}
 			}
 
+			// For debug purposes.
 			int horizontal = 0;  	//Used to store the horizontal move direction.
 			int vertical = 0;		//Used to store the vertical move direction.
 
@@ -232,9 +244,22 @@ namespace Relay
 			return leftHand.IsHolding<T> () || rightHand.IsHolding<T> ();
 		}
 
+		protected override Transform CheckCollision(Vector2 start, Vector2 end)
+		{
+			var hitTransform =  base.CheckCollision(start, end);
+
+			if (hitTransform != null && hitTransform.tag == "Swimmable" && IsHolding<Dolphin>())
+			{
+				return null;
+			}
+
+			return hitTransform;
+		}
+
 		protected override void OnMoveBlocked(Transform component)
 		{
 			Animal animal = component.GetComponent<Animal>();
+
 			if (animal != null)
 			{
 				// this is an animal; pick it up if we can
@@ -246,7 +271,9 @@ namespace Relay
 					return;
 				}
 			}
+
 			Home home = component.GetComponent<Home>();
+
 			if (home != null)
 			{
 				// this is a home; drop an animal into it if we can
@@ -259,17 +286,21 @@ namespace Relay
 				}
 			}
 
-			// if you can't pickup or dropoff, try jumping over it if you have the rabbit
-			float distanceToObstruction =
-				Mathf.Abs (component.transform.position.x - transform.position.x) + Mathf.Abs (component.transform.position.y - transform.position.y);
-			if (IsHolding<Rabbit> () && distanceToObstruction < 2)
+			if (component.tag == "Jumpable" || component.tag == "Home" || component.tag == "Animal")
 			{
-				// use rabbit to jump!
-				int offsetX = (int)(component.transform.position.x - transform.position.x);
-				int offsetY = (int)(component.transform.position.y - transform.position.y);
-				AttemptMove (offsetX * 2, offsetY * 2);
-				return;
+				// if you can't pickup or dropoff, try jumping over it if you have the rabbit
+				float distanceToObstruction =
+					Mathf.Abs (component.transform.position.x - transform.position.x) + Mathf.Abs (component.transform.position.y - transform.position.y);
+				if (IsHolding<Rabbit> () && distanceToObstruction < 2)
+				{
+					// use rabbit to jump!
+					int offsetX = (int)(component.transform.position.x - transform.position.x);
+					int offsetY = (int)(component.transform.position.y - transform.position.y);
+					AttemptMove(offsetX * 2, offsetY * 2);
+					return;
+				}
 			}
+
 		}
 
 		protected override void AnimateDirection(Direction d)
@@ -295,8 +326,9 @@ namespace Relay
 		private void OnTriggerEnter2D(Collider2D other)
 		{
 			// We can use this by setting collision triggers.
-			if (other.tag == "")
+			if (other.tag == "Swimmable")
 			{
+				Debug.Log("Swimming");
 			}
 		}
 
