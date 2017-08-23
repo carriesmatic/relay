@@ -43,6 +43,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelStartDelay: 2
   turnDelay: 0.1
+  timeSprites:
+  - {fileID: 21300000, guid: 7f30bee76e8504e12a5b408cc786d7c8, type: 3}
+  - {fileID: 21300000, guid: 23c64900f69ab4fddb0000d39109549b, type: 3}
+  - {fileID: 21300000, guid: 14f4671690f57417e8418e4b2d2236c3, type: 3}
+  - {fileID: 21300000, guid: 2b4eb098d667c44b086228573529d6d9, type: 3}
+  - {fileID: 21300000, guid: b838ff1dd75fd4ff284b74f01f11c50c, type: 3}
+  - {fileID: 21300000, guid: 5c221e9050c55412e934b34e87b363a0, type: 3}
+  - {fileID: 21300000, guid: b38987d37f98747d9819679569b14025, type: 3}
+  - {fileID: 21300000, guid: 806b89307d179415bb6c1af159823838, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -20,9 +20,11 @@ namespace Relay
 		private int level = 0;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
 
+		public Sprite[] timeSprites;
 		public const int phaseDuration = 8;
-		public bool IsDay { get { return (turn % (phaseDuration * 2)) < phaseDuration; } }
-		public bool IsNight { get { return (turn % (phaseDuration * 2)) >= phaseDuration; } }
+		public int totalPhaseDuration { get { return phaseDuration * 2; } }
+		public bool IsDay { get { return ((turn - 1) % totalPhaseDuration) < phaseDuration; } }
+		public bool IsNight { get { return !IsDay; } }
 
 		public BoardManager boardManager
 		{
@@ -158,23 +160,18 @@ namespace Relay
 				return;
 			}
 
-			string dayText = "Day n_n";
-			string nightText = "Night u_u";
-
 			turn++;
-			string turnText = " (turn " + turn + ")";
+			string turnText = " Turn: " + turn;
 
-			var phaseText = GameObject.Find("PhaseIndicator").GetComponent<Text>();
+			var turnIndicator = GameObject.Find("TurnIndicator").GetComponent<Text>();
+			turnIndicator.text = turnText;
 
-			if (IsDay)
-			{
-				phaseText.text = dayText + turnText;
-				nighttimeShadow.SetActive (false);
-			} else
-			{
-				phaseText.text = nightText + turnText;
-				nighttimeShadow.SetActive (true);
-			}
+			nighttimeShadow.SetActive(!IsDay);
+
+			var phaseIndicator = GameObject.Find("PhaseIndicator").GetComponent<Image>();
+
+			// Every 2 turns, increment timeSprite.
+			phaseIndicator.sprite = timeSprites[(int) Mathf.Floor((turn - 1)/2) % timeSprites.Length];
 
 			// Make animals transparent if they are not active.
 			boardScript.UpdateAnimalActiveUI();
