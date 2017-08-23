@@ -16,7 +16,7 @@ namespace Relay
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
-		private int level = 0;									//Current level number, expressed in game as "Day 1".
+		private int level = 3;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
 
 		public const int phaseDuration = 8;
@@ -81,6 +81,8 @@ namespace Relay
 
 			Invoke("HideLevelImage", levelStartDelay);
 
+			boardScript.currentBoardAnimals.Clear();
+
 			TextAsset board = Resources.Load(level.ToString()) as TextAsset;
 			boardScript.SetupScene(board);
 		}
@@ -102,7 +104,7 @@ namespace Relay
 				levelText.text = "You beat Level " + level + " in " + turn + " turns!";
 
 				//Enable black background image gameObject.
-				levelImage.SetActive (true);
+				levelImage.SetActive(true);
 
 				//Disable this GameManager.
 				enabled = false;
