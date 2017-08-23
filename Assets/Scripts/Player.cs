@@ -25,7 +25,7 @@ namespace Relay
 			{
 				heldAnimal = a;
 				a.transform.gameObject.SetActive(false);
-				updateUI();
+				UpdateUI();
 				return true;
 			}
 			else
@@ -49,7 +49,7 @@ namespace Relay
 
 				heldAnimal.transform.position = home.transform.position;
 				heldAnimal = null;
-				updateUI();
+				UpdateUI();
 				return true;
 			}
 			return false;
@@ -62,7 +62,7 @@ namespace Relay
 				heldAnimal.transform.gameObject.SetActive(true);
 				heldAnimal.transform.position = new Vector2(x, y);
 				heldAnimal = null;
-				updateUI();
+				UpdateUI();
 				return true;
 			}
 			return false;
@@ -76,7 +76,7 @@ namespace Relay
 		// heldAnimal existing => the UIRoot's HeldAnimalImage's
 		// Image source is the heldAnimal's image
 		// heldAnimal null => HeldAnimalImage is inactive
-		private void updateUI()
+		private void UpdateUI()
 		{
 			GameObject heldAnimalImage = handUIRoot.transform.Find("HeldAnimalImage").gameObject;
 			if (heldAnimal != null && !heldAnimalImage.activeSelf)
@@ -130,7 +130,10 @@ namespace Relay
 		{
 			//If it's not the player's turn, exit the function.
 			if (this.isCurrentlyMoving())
+			{
 				return;
+			}
+
 			if (GameManager.instance.enabled == false && GameManager.instance.boardManager.IsGameWon())
 			{
 				if (Input.anyKeyDown)

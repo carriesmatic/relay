@@ -13,7 +13,7 @@ namespace Relay
 
 		public bool IsInHome()
 		{
-			Home parentHome = transform.parent.GetComponent<Home> ();
+			Home parentHome = transform.parent.GetComponent<Home>();
 			return parentHome != null && parentHome.HomeFor == Name;
 		}
 	}

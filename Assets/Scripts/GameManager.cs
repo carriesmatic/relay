@@ -102,7 +102,7 @@ namespace Relay
 				levelText.text = "You beat Level " + level + " in " + turn + " turns!";
 
 				//Enable black background image gameObject.
-				levelImage.SetActive (true);
+				levelImage.SetActive(true);
 
 				//Disable this GameManager.
 				enabled = false;
