@@ -77,6 +77,10 @@ namespace Relay
 				level = level - 2;
 				AdvanceLevel();
 			}
+			else if (Input.GetButtonDown("EndTurn"))
+			{
+				EndTurn();
+			}
 		}
 
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
