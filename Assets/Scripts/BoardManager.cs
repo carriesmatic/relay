@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
  		//Tells Random to use the Unity Engine random number generator.
 using System.Text.RegularExpressions;
+using UnityEngine.UI;
 
 namespace Relay
 {
@@ -25,7 +26,8 @@ namespace Relay
 			public const char Floor = '.';
 			public const char OuterWall = '*';
 			public const char Wall = '-';
-			public const char Chasm = '~';
+			public const char Chasm = '#';
+			public const char Ocean = '~';
 			public const char Player = '@';
 		}
 
@@ -77,7 +79,14 @@ namespace Relay
 			Array.Reverse (tileArrays);
 
 			//Instantiate Board and set boardHolder to its transform.
-			boardHolder = new GameObject("Board").transform;
+			var board = new GameObject("Board");
+			board.AddComponent<AspectRatioFitter>();
+
+			var aspectRatioFitter = board.GetComponent<AspectRatioFitter>();
+			aspectRatioFitter.aspectMode = UnityEngine.UI.AspectRatioFitter.AspectMode.FitInParent;
+			aspectRatioFitter.aspectRatio = boardWidth / boardHeight;
+
+			boardHolder = board.transform;
 
 			//Loop along y axis (+ goes up), starting from -1 to place floor or outerwall tiles.
 			for (int y = -1; y < boardHeight + 1; y++)

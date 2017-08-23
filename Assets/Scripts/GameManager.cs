@@ -16,12 +16,20 @@ namespace Relay
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
-		private int level = 1;									//Current level number, expressed in game as "Day 1".
+		private int level = 0;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
 
 		public const int phaseDuration = 8;
 		public bool IsDay { get { return (turn % (phaseDuration * 2)) < phaseDuration; } }
 		public bool IsNight { get { return (turn % (phaseDuration * 2)) >= phaseDuration; } }
+
+		public BoardManager boardManager
+		{
+			get
+			{
+				return boardScript;
+			}
+		}
 
 		//Awake is always called before any Start functions
 		void Awake()
@@ -43,9 +51,6 @@ namespace Relay
 
 			//Get a component reference to the attached BoardManager script
 			boardScript = GetComponent<BoardManager>();
-
-			//Call the InitGame function to initialize the first level 
-			InitGame();
 		}
 
 		//this is called only once, and the paramter tell it to be called only after the scene was loaded
@@ -60,6 +65,7 @@ namespace Relay
 		//This is called each time a scene is loaded.
 		static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 		{
+			Debug.Log("Scene was loaded.");
 			instance.level++;
 			instance.InitGame();
 		}
@@ -87,14 +93,10 @@ namespace Relay
 			levelImage.SetActive(false);
 		}
 
-		public BoardManager getBoardManager() {
-			return this.boardScript;
-		}
-
 		//call this to test if the game is over
 		public bool TestGameWon()
 		{
-			if (boardScript.IsGameWon ())
+			if (boardScript.IsGameWon())
 			{
 				//Set levelText to display number of levels passed and game over message
 				levelText.text = "You beat Level " + level + " in " + turn + " turns!";
@@ -114,10 +116,11 @@ namespace Relay
 
 		public void EndTurn()
 		{
-			if (TestGameWon ())
+			if (TestGameWon())
 			{
 				return;
 			}
+
 			string dayText = "Day n_n";
 			string nightText = "Night u_u";
 
@@ -134,6 +137,12 @@ namespace Relay
 				phaseText.text = nightText + turnText;
 			}
 		}	
+
+		public void AdvanceLevel()
+		{
+			turn = 0;
+			SceneManager.LoadScene("Main");
+		}
 	}
 }
 
