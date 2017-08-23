@@ -73,9 +73,9 @@ namespace Relay
 		public List<Animal> currentBoardAnimals;
 
 		// The game is won when all animals in the board have gone into their homes.
-		public bool IsGameWon ()
+		public bool IsGameWon()
 		{
-			return currentBoardAnimals.TrueForAll(animal => animal.IsInHome ());
+			return currentBoardAnimals.TrueForAll(animal => animal.IsInHome());
 		}
 
 		//Sets up the outer walls and floor (background) of the game board.
@@ -126,7 +126,7 @@ namespace Relay
 
 		void SetupBoardObjects(string boardObjects)
 		{
-			currentBoardAnimals = new List<Animal> ();
+			currentBoardAnimals = new List<Animal>();
 			foreach (var boardObject in boardObjects.Split('\n'))
 			{
 				var regex = new Regex(@"([a-zA-Z@]) (\d),(\d)");
@@ -162,7 +162,7 @@ namespace Relay
 				Animal animalComponent = instance.GetComponent<Animal> ();
 				if (animalComponent != null)
 				{
-					currentBoardAnimals.Add (animalComponent);
+					currentBoardAnimals.Add(animalComponent);
 				}
 			}
 		}
