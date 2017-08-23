@@ -82,7 +82,7 @@ MonoBehaviour:
   CharlieHome: {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188,
     type: 2}
   SheilaHome: {fileID: 1379299263085284, guid: 8608d1add81e01c42b0e859e9ecf8b65, type: 2}
-  SpringHome: {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188, type: 2}
-  SummerHome: {fileID: 1763617720631292, guid: 2be2a58491e3e4bab8529b632ddee188, type: 2}
+  SpringHome: {fileID: 1933539565169794, guid: c49046892ed61ea4886bf06a3d926bd9, type: 2}
+  SummerHome: {fileID: 1732477123351732, guid: 4a1fe8a25aa5e3f4ab1e5e62bb1996ed, type: 2}
   boardHolder: {fileID: 0}
   currentBoardAnimals: []
