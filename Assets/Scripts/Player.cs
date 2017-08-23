@@ -34,6 +34,11 @@ namespace Relay
 			}
 		}
 
+		public bool IsHolding<T>() where T : Animal
+		{
+			return heldAnimal != null && heldAnimal.gameObject.GetComponent<T> () != null;
+		}
+
 		public bool TryPlaceIntoHome(Home home)
 		{
 			if (heldAnimal != null && heldAnimal.Name == home.HomeFor)
@@ -221,6 +226,11 @@ namespace Relay
 			SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
 		}
 
+		public bool IsHolding<T>() where T : Animal
+		{
+			return leftHand.IsHolding<T> () || rightHand.IsHolding<T> ();
+		}
+
 		protected override void OnMoveBlocked(Transform component)
 		{
 			Animal animal = component.GetComponent<Animal>();
@@ -232,6 +242,7 @@ namespace Relay
 				{
 					// pickup successful - go to next turn
 					GameManager.instance.EndTurn();
+					return;
 				}
 			}
 			Home home = component.GetComponent<Home>();
@@ -243,7 +254,20 @@ namespace Relay
 				{
 					// animal successfully placed - go to next turn
 					GameManager.instance.EndTurn();
+					return;
 				}
+			}
+
+			// if you can't pickup or dropoff, try jumping over it if you have the rabbit
+			float distanceToObstruction =
+				Mathf.Abs (component.transform.position.x - transform.position.x) + Mathf.Abs (component.transform.position.y - transform.position.y);
+			if (IsHolding<Rabbit> () && distanceToObstruction < 2)
+			{
+				// use rabbit to jump!
+				int offsetX = (int)(component.transform.position.x - transform.position.x);
+				int offsetY = (int)(component.transform.position.y - transform.position.y);
+				AttemptMove (offsetX * 2, offsetY * 2);
+				return;
 			}
 		}
 
