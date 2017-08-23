@@ -14,6 +14,7 @@ namespace Relay
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
 		private Text levelText;									//Text to display current level number.
+		private GameObject nighttimeShadow;
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		private int level = 0;									//Current level number, expressed in game as "Day 1".
@@ -104,8 +105,12 @@ namespace Relay
 		//Initializes the game for each level.
 		void InitGame()
 		{
+			enabled = true;
+
 			levelImage = GameObject.Find("LevelImage");
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
+			nighttimeShadow = GameObject.Find ("NighttimeShadow");
+			nighttimeShadow.SetActive (false);
 			levelText.text = "Level " + level;
 			levelImage.SetActive(true);
 
@@ -164,13 +169,15 @@ namespace Relay
 			if (IsDay)
 			{
 				phaseText.text = dayText + turnText;
+				nighttimeShadow.SetActive (false);
 			} else
 			{
 				phaseText.text = nightText + turnText;
+				nighttimeShadow.SetActive (true);
 			}
 
 			// Make animals transparent if they are not active.
-			boardScript.UpdateAnimalActivity();
+			boardScript.UpdateAnimalActiveUI();
 		}	
 
 		public void AdvanceLevel()
