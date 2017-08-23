@@ -85,6 +85,8 @@ namespace Relay
 				heldAnimalImage.SetActive(true);
 				Image image = heldAnimalImage.GetComponent<Image>();
 				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer>();
+				// animalSpriteRenderer.color
+				image.color = animalSpriteRenderer.color;
 				image.sprite = animalSpriteRenderer.sprite;
 			}
 			else if (heldAnimal == null && heldAnimalImage.activeSelf)

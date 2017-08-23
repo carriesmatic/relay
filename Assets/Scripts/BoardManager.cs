@@ -18,7 +18,8 @@ namespace Relay
 			Charlie = 'a',
 			Sheila = 'b',
 			Spring = 'c',
-			Summer = 'd'
+			Summer = 'd',
+			Chorlie = 'e',
 		}
 
 		public static class Symbols
@@ -46,15 +47,18 @@ namespace Relay
 		//Height of our game board (usually 7 tiles).
 		private int boardHeight = 0;
 
+		public GameObject OceanTile;
 		public GameObject FloorTile;
 		public GameObject OuterWallTile;
 		public GameObject WallTile;
 		public GameObject ChasmTile;
 		public GameObject Player;
+		public GameObject Chorlie;
 		public GameObject Charlie;
 		public GameObject Sheila;
 		public GameObject Spring;
 		public GameObject Summer;
+		public GameObject ChorlieHome;
 		public GameObject CharlieHome;
 		public GameObject SheilaHome;
 		public GameObject SpringHome;
@@ -226,6 +230,7 @@ namespace Relay
 			}
 
 			prefabMap[Symbols.Floor] = FloorTile;
+			prefabMap[Symbols.Ocean] = OceanTile;
 			prefabMap[Symbols.OuterWall] = OuterWallTile;
 			prefabMap[Symbols.Wall] = WallTile;
 			prefabMap[Symbols.Chasm] = ChasmTile;
@@ -235,8 +240,10 @@ namespace Relay
 			prefabMap[(char) AnimalSymbols.Sheila] = Sheila;
 			prefabMap[(char) AnimalSymbols.Spring] = Spring;
 			prefabMap[(char) AnimalSymbols.Summer] = Summer;
+			prefabMap[(char)AnimalSymbols.Chorlie] = Chorlie;
 
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Charlie)] = CharlieHome;
+			prefabMap[Char.ToUpper((char) AnimalSymbols.Chorlie)] = ChorlieHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Sheila)] = SheilaHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Spring)] = SpringHome;
 			prefabMap[Char.ToUpper((char) AnimalSymbols.Summer)] = SummerHome;
