@@ -55,19 +55,24 @@ namespace Relay
 
 		void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.R))
+			if (Input.GetButtonDown("Reload"))
 			{
 				// Reload current level.
 				level--;
 				AdvanceLevel();
 			}
-			else if (Input.GetKeyDown(KeyCode.S))
+			else if (Input.GetButtonDown("Skip"))
 			{
 				// Skip current level.
 				AdvanceLevel();
 			}
-			else if (Input.GetKeyDown(KeyCode.B))
+			else if (Input.GetButtonDown("Back"))
 			{
+				if (level == 1)
+				{
+					return;
+				}
+
 				// Go back one level.
 				level = level - 2;
 				AdvanceLevel();
