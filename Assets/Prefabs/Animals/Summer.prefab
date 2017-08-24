@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Summer
+  isDiurnal: 1
   isNocturnal: 0
 --- !u!212 &212104050550346730
 SpriteRenderer:

@@ -11,6 +11,8 @@ namespace Relay
 	{
 		public string Name;
 
+		public bool isDiurnal;
+
 		public bool isNocturnal;
 
 		public bool IsInHome()
@@ -21,7 +23,10 @@ namespace Relay
 
 		public bool IsCurrentlyActive()
 		{
-			return isNocturnal ? !GameManager.instance.IsDay : true;
+			var nocturnalActivity = isNocturnal ? !GameManager.instance.IsDay  : true;
+			var diurnalActivity = isDiurnal ? GameManager.instance.IsDay : true;
+
+			return nocturnalActivity && diurnalActivity;
 		}
 	}
 }
