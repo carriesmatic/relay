@@ -21,7 +21,7 @@ namespace Relay
 
 		public bool IsCurrentlyActive()
 		{
-			return isNocturnal ? GameManager.instance.IsDay : true;
+			return isNocturnal ? !GameManager.instance.IsDay : true;
 		}
 	}
 }

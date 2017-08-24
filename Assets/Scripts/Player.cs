@@ -268,7 +268,7 @@ namespace Relay
 		{
 			var hitTransform =  base.CheckCollision(start, end);
 
-			if (hitTransform != null && hitTransform.tag == "Swimmable" && IsHolding<Dolphin>())
+			if (hitTransform != null && hitTransform.tag == "Swimmable" && (IsHolding<Dolphin>() || IsHolding<Orca>()))
 			{
 				return null;
 			}
