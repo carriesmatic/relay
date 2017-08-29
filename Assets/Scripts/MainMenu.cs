@@ -7,6 +7,11 @@ namespace Relay
 {
 	public class MainMenu : MonoBehaviour
 	{
+		void Start()
+		{
+			Screen.orientation = ScreenOrientation.Portrait;
+		}
+
 		public void StartGame(string startScene)
 		{
 			Debug.Log("Starting game.");
