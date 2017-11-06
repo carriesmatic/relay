@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0
+  bundleVersion: 0.1
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -141,7 +141,7 @@ PlayerSettings:
   targetPixelDensity: 0
   resolutionScalingMode: 0
   applicationIdentifier:
-    Android: com.Company.ProductName
+    Android: com.Miaochan.Relay
     Standalone: unity.DefaultCompany.2DRoguelike
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName
@@ -222,8 +222,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: C:/Users/Xiaohan/Dropbox/Project Relay/user.keystore
+  AndroidKeyaliasName: relay
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 1
