@@ -16,7 +16,7 @@ namespace Relay
 		private Text levelText;									//Text to display current level number.
 		private GameObject nighttimeShadow;
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
-		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
+        private IsoBoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		private int level = 0;									//Current level number, expressed in game as "Day 1".
 		private int turn = 0;									//Current turn number.
 
@@ -26,7 +26,7 @@ namespace Relay
 		public bool IsDay { get { return ((turn - 1) % totalPhaseDuration) < phaseDuration; } }
 		public bool IsNight { get { return !IsDay; } }
 
-		public BoardManager boardManager
+        public IsoBoardManager boardManager
 		{
 			get
 			{
@@ -53,7 +53,7 @@ namespace Relay
 			DontDestroyOnLoad(gameObject);
 
 			//Get a component reference to the attached BoardManager script
-			boardScript = GetComponent<BoardManager>();
+            boardScript = GetComponent<IsoBoardManager>();
 		}
 
 		void Update()
