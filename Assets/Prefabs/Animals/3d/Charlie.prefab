@@ -37,8 +37,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1948333324628288}
   m_LocalRotation: {x: 0.49090302, y: 0.11865619, z: 0.8630838, w: 0.0046302984}
-  m_LocalPosition: {x: -399.58, y: 357.12, z: -447.92}
-  m_LocalScale: {x: 64.97499, y: 64.97497, z: 64.97497}
+  m_LocalPosition: {x: 2731.0237, y: 1463.6097, z: 602.84644}
+  m_LocalScale: {x: 73.2598, y: 73.25979, z: 73.25979}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,7 +52,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -70,7 +69,6 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
