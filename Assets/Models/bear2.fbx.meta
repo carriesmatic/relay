@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 5c9c8e828c27c435eb55fb91011d905a
-timeCreated: 1510444111
+guid: 119731c2a1fb74bbd89c86798caac974
+timeCreated: 1510445477
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -30,7 +30,7 @@ ModelImporter:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -62,7 +62,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    swapUVChannels: 0
+    swapUVChannels: 1
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
