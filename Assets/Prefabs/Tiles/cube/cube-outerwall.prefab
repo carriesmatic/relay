@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33754308618172028}
   - component: {fileID: 65434604907974920}
   - component: {fileID: 23127497520622520}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cube-outerwall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
