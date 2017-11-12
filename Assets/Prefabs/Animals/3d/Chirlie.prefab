@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65520405337312566}
   - component: {fileID: 23710611862625938}
   - component: {fileID: 114289246761932538}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chirlie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
