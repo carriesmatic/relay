@@ -100,12 +100,13 @@ namespace Relay
 			if (heldAnimal != null && !heldAnimalImage.activeSelf)
 			{
 				// activate heldAnimalImage
-				heldAnimalImage.SetActive(true);
-				Image image = heldAnimalImage.GetComponent<Image>();
-				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer>();
-				// animalSpriteRenderer.color
-				image.color = animalSpriteRenderer.color;
-				image.sprite = animalSpriteRenderer.sprite;
+				// TODO make this work in 3D
+//				heldAnimalImage.SetActive(true);
+//				Image image = heldAnimalImage.GetComponent<Image>();
+//				SpriteRenderer animalSpriteRenderer = heldAnimal.GetComponent<SpriteRenderer>();
+//				// animalSpriteRenderer.color
+//				image.color = animalSpriteRenderer.color;
+//				image.sprite = animalSpriteRenderer.sprite;
 			}
 			else if (heldAnimal == null && heldAnimalImage.activeSelf)
 			{

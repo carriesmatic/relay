@@ -125,6 +125,9 @@ namespace Relay
 				{
 					GameObject toInstantiate;
 
+					// HACKHACK use some random temp letter for tileChar init
+					char tileChar = 't';
+
 					//Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
 					if (x == -1 || x == boardWidth || y == -1 || y == boardHeight)
 					{
@@ -133,12 +136,18 @@ namespace Relay
 					else
 					{
 						// Instantiate the appropriate tile.
-						toInstantiate = prefabMap[tileArrays[y][x]];
+						tileChar = tileArrays[y][x];
+						toInstantiate = prefabMap[tileChar];
 					}
 
 					//Instantiate the GameObject instance using the prefab chosen for toInstantiate at the Vector3 corresponding to current grid position in loop, cast it to GameObject.
 					GameObject instance =
 						Instantiate(toInstantiate, new Vector3(x, 0f, y), Quaternion.identity) as GameObject;
+
+					if (tileChar == Symbols.Wall || toInstantiate == OuterWallTile)
+					{
+						instance.transform.position = new Vector3(x, 1f, y);
+					}
 
 					//Set the parent of our newly instantiated object instance to boardHolder, this is just organizational to avoid cluttering hierarchy.
 					instance.transform.SetParent(boardHolder);

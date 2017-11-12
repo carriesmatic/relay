@@ -26,9 +26,9 @@ namespace Relay
 		//Time it will take object to move, in seconds.
 		public float moveTime = 0.1f;
 
-		private BoxCollider2D boxCollider;
+		private BoxCollider boxCollider;
 		//The BoxCollider2D component attached to this object.
-		private Rigidbody2D rb2D;
+		private Rigidbody rigidBody;
 		//The Rigidbody2D component attached to this object.
 		private float inverseMoveTime;
 		//Used to make movement more efficient.
@@ -38,11 +38,11 @@ namespace Relay
 		//Protected, virtual functions can be overridden by inheriting classes.
 		protected virtual void Start()
 		{
-			//Get a component reference to this object's BoxCollider2D
-			boxCollider = GetComponent <BoxCollider2D>();
+			//Get a component reference to this object's BoxCollider
+			boxCollider = GetComponent <BoxCollider>();
 			
-			//Get a component reference to this object's Rigidbody2D
-			rb2D = GetComponent <Rigidbody2D>();
+			//Get a component reference to this object's Rigidbody
+			rigidBody = GetComponent <Rigidbody>();
 			
 			//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
 			inverseMoveTime = 1f / moveTime;
@@ -55,19 +55,17 @@ namespace Relay
 
 		protected virtual Transform CheckCollision(Vector3 start, Vector3 end)
 		{
-//			//Disable the boxCollider so that linecast doesn't hit this object's own collider.
-//			boxCollider.enabled = false;
-//
-//			//Check if there's something at the end location.
-//			RaycastHit hitInfo;
-//			Physics.Linecast(end, end, out hitInfo, blockingLayer);
-//
-//			//Re-enable boxCollider after linecast
-//			boxCollider.enabled = true;
-//
-//			return hitInfo.transform;
+			//Disable the boxCollider so that linecast doesn't hit this object's own collider.
+			boxCollider.enabled = false;
 
-			return null;
+			//Check if there's something at the end location.
+			RaycastHit hitInfo;
+			Physics.Linecast(start, end, out hitInfo, blockingLayer);
+
+			//Re-enable boxCollider after linecast
+			boxCollider.enabled = true;
+
+			return hitInfo.transform;
 		}
 
 		//Move returns true if it is able to move and false if not.
@@ -104,12 +102,13 @@ namespace Relay
 			//Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
 			//Square magnitude is used instead of magnitude because it's computationally cheaper.
 			float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+
+			int iterations = 0;
 			
-			//While that distance is greater than a very small amount (Epsilon, almost zero):
-			while (sqrRemainingDistance > float.Epsilon)
+			//While that distance is greater than a very small amount
+			while (sqrRemainingDistance > 1e-5 && iterations++ < 100)
 			{
 				//Find a new position proportionally closer to the end, based on the moveTime
-//				Vector3 newPosition = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
 				Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
 				
 				//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
