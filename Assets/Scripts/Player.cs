@@ -264,7 +264,7 @@ namespace Relay
 			return leftHand.IsHolding<T> () || rightHand.IsHolding<T> ();
 		}
 
-		protected override Transform CheckCollision(Vector2 start, Vector2 end)
+		protected override Transform CheckCollision(Vector3 start, Vector3 end)
 		{
 			var hitTransform =  base.CheckCollision(start, end);
 
@@ -330,16 +330,16 @@ namespace Relay
 		{
 			switch (d)
 			{
-			case Direction.Up:
+			case Direction.UpLeft:
 				animator.SetTrigger("walkBack");
 				break;
-			case Direction.Down:
+			case Direction.DownRight:
 				animator.SetTrigger("walkFront");
 				break;
-			case Direction.Left:
+			case Direction.DownLeft:
 				animator.SetTrigger("walkLeft");
 				break;
-			case Direction.Right:
+			case Direction.UpRight:
 				animator.SetTrigger("walkRight");
 				break;
 			}

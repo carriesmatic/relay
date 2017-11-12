@@ -8,10 +8,10 @@ namespace Relay
 	{
 		public enum Direction
 		{
-			Up,
-			Down,
-			Left,
-			Right
+			DownLeft,
+			DownRight,
+			UpLeft,
+			UpRight
 		}
 
 		//Layer on which collision will be checked.
@@ -33,7 +33,7 @@ namespace Relay
 		private float inverseMoveTime;
 		//Used to make movement more efficient.
 
-		public Direction moveDirection = Direction.Down;
+		public Direction moveDirection = Direction.DownRight;
 
 		//Protected, virtual functions can be overridden by inheriting classes.
 		protected virtual void Start()
@@ -53,29 +53,32 @@ namespace Relay
 			return isMoving;
 		}
 
-		protected virtual Transform CheckCollision(Vector2 start, Vector2 end)
+		protected virtual Transform CheckCollision(Vector3 start, Vector3 end)
 		{
-			//Disable the boxCollider so that linecast doesn't hit this object's own collider.
-			boxCollider.enabled = false;
-			
-			//Cast a line from start point to end point checking collisions configured by the blocking layer.
-			var hit = Physics2D.Linecast(end, end, blockingLayer);
+//			//Disable the boxCollider so that linecast doesn't hit this object's own collider.
+//			boxCollider.enabled = false;
+//
+//			//Check if there's something at the end location.
+//			RaycastHit hitInfo;
+//			Physics.Linecast(end, end, out hitInfo, blockingLayer);
+//
+//			//Re-enable boxCollider after linecast
+//			boxCollider.enabled = true;
+//
+//			return hitInfo.transform;
 
-			//Re-enable boxCollider after linecast
-			boxCollider.enabled = true;
-
-			return hit.transform;
+			return null;
 		}
 
 		//Move returns true if it is able to move and false if not.
 		//hit != null <=> Move returns false
-		private bool Move(int xDir, int yDir, out Transform hitTransform)
+		private bool Move(int xDir, int zDir, out Transform hitTransform)
 		{
 			//Store start position to move from, based on objects current transform position.
-			Vector2 start = transform.position;
+			Vector3 start = transform.position;
 
 			// Calculate end position based on the direction parameters passed in when calling Move.
-			Vector2 end = start + new Vector2(xDir, yDir);
+			Vector3 end = start + new Vector3(xDir, 0, zDir);
 
 			hitTransform = CheckCollision(start, end);
 			
@@ -106,10 +109,11 @@ namespace Relay
 			while (sqrRemainingDistance > float.Epsilon)
 			{
 				//Find a new position proportionally closer to the end, based on the moveTime
-				Vector3 newPosition = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
+//				Vector3 newPosition = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
+				Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
 				
 				//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-				rb2D.MovePosition(newPosition);
+				transform.position = newPosition;
 				
 				//Recalculate the remaining distance after moving.
 				sqrRemainingDistance = (transform.position - end).sqrMagnitude;
@@ -117,30 +121,30 @@ namespace Relay
 				//Return and loop until sqrRemainingDistance is close enough to zero to end the function
 				yield return null;
 			}
-			rb2D.MovePosition(end);
+			transform.position = end;
 			isMoving = false;
 		}
 
-		public void AttemptMove(int xDir, int yDir)
+		public void AttemptMove(int xDir, int zDir)
 		{
 			Transform hitTransform;
 			Direction newMoveDirection = moveDirection;
 
 			if (xDir > 0)
 			{
-				newMoveDirection = Direction.Right;
+				newMoveDirection = Direction.UpRight;
 			}
 			else if (xDir < 0)
 			{
-				newMoveDirection = Direction.Left;
+				newMoveDirection = Direction.DownLeft;
 			}
-			else if (yDir > 0)
+			else if (zDir > 0)
 			{
-				newMoveDirection = Direction.Up;
+				newMoveDirection = Direction.UpLeft;
 			}
-			else if (yDir < 0)
+			else if (zDir < 0)
 			{
-				newMoveDirection = Direction.Down;
+				newMoveDirection = Direction.DownRight;
 			}
 
 			if (moveDirection != newMoveDirection)
@@ -150,7 +154,7 @@ namespace Relay
 			}
 
 			//Set canMove to true if Move was successful, false if failed.
-			bool canMove = Move(xDir, yDir, out hitTransform);
+			bool canMove = Move(xDir, zDir, out hitTransform);
 
 			if (canMove)
 			{
